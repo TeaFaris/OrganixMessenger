@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Organix.ServerData;
 using OrganixMessenger.Base;
 using OrganixMessenger.Configuration;
+using OrganixMessenger.ServerData;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,7 +50,12 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
+// Database
+builder.Services.AddApplicationDBContext();
+
 var app = builder.Build();
+
+app.UseApplicationDBContext();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -64,10 +72,11 @@ else
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-app.UseAntiforgery();
 
 // ASP.NET Pipelines
 app.UseRouting();
+
+app.UseAntiforgery();
 
 app.UseAuthentication();
 app.UseAuthorization();
