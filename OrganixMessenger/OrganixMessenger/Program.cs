@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using OrganixMessenger.Base;
 using OrganixMessenger.ServerConfigurations;
 using OrganixMessenger.ServerData;
+using OrganixMessenger.ServerServices.EmailServices;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,6 +53,15 @@ builder.Services.AddAuthorization();
 
 // Database
 builder.Services.AddApplicationDBContext();
+
+// Custom services
+//// Repositories
+
+//// Authentication
+
+//// Other
+builder.Services
+    .AddSingleton<IEmailSender, SmtpEmailSender>();
 
 var app = builder.Build();
 
