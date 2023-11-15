@@ -8,10 +8,13 @@ var config = builder.Configuration;
 builder.Services
     .Configure<JWTSettings>(config.GetSection(nameof(JWTSettings)));
 
-// Add services to the container.
+// Blazor services
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+// ASP.NET services
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -31,6 +34,10 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+// ASP.NET Pipelines
+app.UseRouting();
+app.MapControllers();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
