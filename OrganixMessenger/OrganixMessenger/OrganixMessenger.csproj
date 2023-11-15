@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\OrganixMessenger.ServerConfigurations\OrganixMessenger.ServerConfigurations.csproj" />
     <ProjectReference Include="..\OrganixMessenger.Client\OrganixMessenger.Client.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
   </ItemGroup>
 
