@@ -1,5 +1,4 @@
-using OrganixMessenger.Client.Pages;
-using OrganixMessenger.Shared;
+using OrganixMessenger.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +29,6 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(Counter).Assembly);
+    .AddAdditionalAssemblies(typeof(OrganixMessenger.Client._Imports).Assembly);
 
 app.Run();
