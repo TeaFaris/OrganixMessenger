@@ -7,11 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OrganixMessenger.ServerConfigurations\OrganixMessenger.ServerConfigurations.csproj" />
+    <ProjectReference Include="..\OrganixMessenger.ServerData\OrganixMessenger.ServerData.csproj" />
+    <ProjectReference Include="..\OrganixMessenger.ServerModels\OrganixMessenger.ServerModels.csproj" />
   </ItemGroup>
 
 </Project>

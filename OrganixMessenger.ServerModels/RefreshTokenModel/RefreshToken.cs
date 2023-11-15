@@ -22,6 +22,6 @@ namespace OrganixMessenger.ServerModels.RefreshTokenModel
         [Required]
         public DateTime IssuedDate { get; init; }
         [Required]
-        public DateTime ExpiryDate { get; init; }
+        public DateTime ExpiryDate { get; set; }
     }
 }

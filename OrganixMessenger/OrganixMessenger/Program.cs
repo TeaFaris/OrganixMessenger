@@ -4,6 +4,10 @@ using OrganixMessenger.Base;
 using OrganixMessenger.ServerConfigurations;
 using OrganixMessenger.ServerData;
 using OrganixMessenger.ServerServices.EmailServices;
+using OrganixMessenger.ServerServices.JWTTokenGeneratorService;
+using OrganixMessenger.ServerServices.Repositories.RefreshTokenRepositories;
+using OrganixMessenger.ServerServices.Repositories.UserRepositories;
+using OrganixMessenger.ServerServices.UserAuthenticationManagerService;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,8 +60,18 @@ builder.Services.AddApplicationDBContext();
 
 // Custom services
 //// Repositories
+builder.Services
+    .AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
+builder.Services
+    .AddScoped<IUserRepository, UserRepository>();
 
 //// Authentication
+builder.Services
+    .AddScoped<JWTTokenGenerator>();
+
+builder.Services
+    .AddScoped<UserAuthenticationManager>();
 
 //// Other
 builder.Services

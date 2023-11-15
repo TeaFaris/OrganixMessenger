@@ -7,18 +7,16 @@ namespace OrganixMessenger.ServerServices.EmailServices
 {
     public sealed class SmtpEmailSender(IOptions<EmailServceSettings> emailConfiguration) : IEmailSender
     {
-        private readonly EmailServceSettings emailConfiguration = emailConfiguration.Value;
-
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            using var client = new SmtpClient(emailConfiguration.Host, emailConfiguration.Port)
+            using var client = new SmtpClient(emailConfiguration.Value.Host, emailConfiguration.Value.Port)
             {
                 EnableSsl = true,
-                Credentials = new NetworkCredential(emailConfiguration.Username, emailConfiguration.Password)
+                Credentials = new NetworkCredential(emailConfiguration.Value.Username, emailConfiguration.Value.Password)
             };
 
             return client.SendMailAsync(new MailMessage(
-                        from: emailConfiguration.Username,
+                        from: emailConfiguration.Value.Username,
                         to: email,
                         subject: subject,
                         body: htmlMessage
