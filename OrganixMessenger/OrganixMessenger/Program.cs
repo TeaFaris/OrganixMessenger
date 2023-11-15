@@ -1,6 +1,12 @@
 using OrganixMessenger.Base;
+using OrganixMessenger.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
+
+// Configs
+builder.Services
+    .Configure<JWTSettings>(config.GetSection(nameof(JWTSettings)));
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
