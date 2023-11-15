@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Organix.ServerData;
 using OrganixMessenger.Base;
-using OrganixMessenger.Configuration;
+using OrganixMessenger.ServerConfigurations;
 using OrganixMessenger.ServerData;
 using System.Text;
 
@@ -13,6 +11,8 @@ var config = builder.Configuration;
 // Configs
 builder.Services
     .Configure<JWTSettings>(config.GetSection(nameof(JWTSettings)));
+builder.Services
+    .Configure<EmailServceSettings>(config.GetSection(nameof(EmailServceSettings)));
 
 // Blazor services
 builder.Services.AddRazorComponents()
