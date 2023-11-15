@@ -3,9 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrganixMessenger", "OrganixMessenger\OrganixMessenger\OrganixMessenger.csproj", "{86378513-DD30-43A6-90BE-4788B62E70C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganixMessenger", "OrganixMessenger\OrganixMessenger\OrganixMessenger.csproj", "{86378513-DD30-43A6-90BE-4788B62E70C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrganixMessenger.Client", "OrganixMessenger\OrganixMessenger.Client\OrganixMessenger.Client.csproj", "{8E20E15A-3290-43F1-95A6-B6EC8414F914}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganixMessenger.Client", "OrganixMessenger\OrganixMessenger.Client\OrganixMessenger.Client.csproj", "{8E20E15A-3290-43F1-95A6-B6EC8414F914}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganixMessenger.ServerConfigurations", "OrganixMessenger.ServerConfigurations\OrganixMessenger.ServerConfigurations.csproj", "{81CBD3E7-CC7E-4DA4-B310-306BC3FEBAEE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganixMessenger.Shared", "OrganixMessenger.Shared\OrganixMessenger.Shared.csproj", "{CA97ECF9-AFA5-4780-9456-56ED92B7F91B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganixMessenger.ServerData", "OrganixMessenger.ServerData\OrganixMessenger.ServerData.csproj", "{9FE31A00-0EBD-4771-939E-1B0893AE6D3C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganixMessenger.ServerModels", "OrganixMessenger.ServerModels\OrganixMessenger.ServerModels.csproj", "{50DDE81F-7DDB-42C4-9ACE-6450EBE45F0C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganixMessenger.ServerServices", "OrganixMessenger.ServerServices\OrganixMessenger.ServerServices.csproj", "{831EA311-7251-4FC7-AAB7-D742B4AC63E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrganixMessenger.ServerTests", "OrganixMessenger.ServerTests\OrganixMessenger.ServerTests.csproj", "{FFDD8720-0C32-4B00-A22F-8BC77D8972AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +33,30 @@ Global
 		{8E20E15A-3290-43F1-95A6-B6EC8414F914}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E20E15A-3290-43F1-95A6-B6EC8414F914}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E20E15A-3290-43F1-95A6-B6EC8414F914}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81CBD3E7-CC7E-4DA4-B310-306BC3FEBAEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81CBD3E7-CC7E-4DA4-B310-306BC3FEBAEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81CBD3E7-CC7E-4DA4-B310-306BC3FEBAEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81CBD3E7-CC7E-4DA4-B310-306BC3FEBAEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA97ECF9-AFA5-4780-9456-56ED92B7F91B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA97ECF9-AFA5-4780-9456-56ED92B7F91B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA97ECF9-AFA5-4780-9456-56ED92B7F91B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA97ECF9-AFA5-4780-9456-56ED92B7F91B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FE31A00-0EBD-4771-939E-1B0893AE6D3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FE31A00-0EBD-4771-939E-1B0893AE6D3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FE31A00-0EBD-4771-939E-1B0893AE6D3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FE31A00-0EBD-4771-939E-1B0893AE6D3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50DDE81F-7DDB-42C4-9ACE-6450EBE45F0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50DDE81F-7DDB-42C4-9ACE-6450EBE45F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50DDE81F-7DDB-42C4-9ACE-6450EBE45F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50DDE81F-7DDB-42C4-9ACE-6450EBE45F0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{831EA311-7251-4FC7-AAB7-D742B4AC63E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{831EA311-7251-4FC7-AAB7-D742B4AC63E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{831EA311-7251-4FC7-AAB7-D742B4AC63E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{831EA311-7251-4FC7-AAB7-D742B4AC63E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFDD8720-0C32-4B00-A22F-8BC77D8972AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFDD8720-0C32-4B00-A22F-8BC77D8972AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFDD8720-0C32-4B00-A22F-8BC77D8972AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFDD8720-0C32-4B00-A22F-8BC77D8972AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

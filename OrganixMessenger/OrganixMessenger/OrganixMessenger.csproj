@@ -4,11 +4,20 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>40bb3de4-eda5-4d89-b5a3-2c29cd2dbb42</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\OrganixMessenger.ServerConfigurations\OrganixMessenger.ServerConfigurations.csproj" />
+    <ProjectReference Include="..\..\OrganixMessenger.ServerData\OrganixMessenger.ServerData.csproj" />
+    <ProjectReference Include="..\..\OrganixMessenger.ServerServices\OrganixMessenger.ServerServices.csproj" />
     <ProjectReference Include="..\OrganixMessenger.Client\OrganixMessenger.Client.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>
