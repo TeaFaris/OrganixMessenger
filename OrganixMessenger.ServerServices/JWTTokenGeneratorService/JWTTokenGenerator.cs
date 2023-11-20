@@ -4,7 +4,7 @@
                 IOptions<JWTSettings> jwtSettings,
                 IRefreshTokenRepository refreshTokenRepository,
                 IUserRepository userRepository
-            )
+            ) : IJWTTokenGenerator
     {
         private static readonly JwtSecurityTokenHandler SecurityTokenHandler = new();
 
@@ -91,11 +91,5 @@
 
             return token;
         }
-    }
-
-    public sealed class JWTTokens
-    {
-        public string JWTToken { get; init; }
-        public string RefreshToken { get; init; }
     }
 }

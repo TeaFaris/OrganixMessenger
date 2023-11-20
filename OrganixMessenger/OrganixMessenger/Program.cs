@@ -1,6 +1,8 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using OrganixMessenger.Base;
+using OrganixMessenger.Controllers.Util;
 using OrganixMessenger.ServerConfigurations;
 using OrganixMessenger.ServerData;
 using OrganixMessenger.ServerServices.EmailServices;
@@ -25,7 +27,9 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 // ASP.NET services
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddApplicationPart(typeof(Responses).Assembly);
+builder.Services.AddEndpointsApiExplorer();
 
 // JWT Authentication
 var key = Encoding.UTF8.GetBytes(config["JWTSettings:Key"]!);
@@ -76,6 +80,18 @@ builder.Services
 //// Other
 builder.Services
     .AddSingleton<IEmailSender, SmtpEmailSender>();
+
+// API Versioning
+builder.Services
+       .AddApiVersioning(options =>
+       {
+           options.AssumeDefaultVersionWhenUnspecified = true;
+           options.DefaultApiVersion = new ApiVersion(1, 0);
+           options.ReportApiVersions = true;
+           options.ApiVersionReader = ApiVersionReader.Combine(
+                   new HeaderApiVersionReader("X-Version")
+               );
+       });
 
 var app = builder.Build();
 

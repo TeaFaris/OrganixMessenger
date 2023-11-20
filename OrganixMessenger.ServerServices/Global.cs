@@ -2,7 +2,7 @@
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Options;
 global using Microsoft.IdentityModel.Tokens;
-global using Organix.ServerData;
+global using OrganixMessenger.ServerData;
 global using OrganixMessenger.ServerConfigurations;
 global using OrganixMessenger.ServerModels.ApplicationUserModel;
 global using OrganixMessenger.ServerModels.RefreshTokenModel;

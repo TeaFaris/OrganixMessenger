@@ -5,6 +5,7 @@
                 IEmailSender emailSender,
                 IHttpContextService httpContextService
             )
+: IUserAuthenticationManager
     {
         const int VerificationTokenLength = 64;
         const int PasswordResetExpiresMinutes = 15;
@@ -186,29 +187,6 @@
         {
             var randomBytes = RandomNumberGenerator.GetBytes(VerificationTokenLength);
             return Convert.ToHexString(randomBytes);
-        }
-
-        public sealed class RegisterUserResult
-        {
-            public bool Successful { get; init; }
-            public IEnumerable<string> Errors { get; init; }
-            public ApplicationUser? User { get; init; }
-        }
-
-        public sealed class VerifyEmailResult
-        {
-            public bool Successful { get; init; }
-        }
-
-        public sealed class ChangePasswordResult
-        {
-            public bool Successful { get; init; }
-        }
-
-        public sealed class ForgotPasswordResult
-        {
-            public bool Successful { get; init; }
-            public string? ErrorMessage { get; init; }
         }
     }
 }

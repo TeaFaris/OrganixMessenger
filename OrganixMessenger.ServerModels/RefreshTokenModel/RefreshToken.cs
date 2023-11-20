@@ -1,8 +1,4 @@
-﻿using OrganixMessenger.ServerModels.ApplicationUserModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace OrganixMessenger.ServerModels.RefreshTokenModel
+﻿namespace OrganixMessenger.ServerModels.RefreshTokenModel
 {
     public sealed class RefreshToken
     {

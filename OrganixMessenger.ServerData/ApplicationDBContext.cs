@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using OrganixMessenger.ServerModels.ApplicationUserModel;
 using OrganixMessenger.ServerModels.RefreshTokenModel;
 
-namespace Organix.ServerData
+namespace OrganixMessenger.ServerData
 {
     public sealed class ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : DbContext(options)
     {

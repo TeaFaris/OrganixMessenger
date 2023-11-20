@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\OrganixMessenger.Controllers\OrganixMessenger.Controllers.csproj" />
     <ProjectReference Include="..\..\OrganixMessenger.ServerConfigurations\OrganixMessenger.ServerConfigurations.csproj" />
     <ProjectReference Include="..\..\OrganixMessenger.ServerData\OrganixMessenger.ServerData.csproj" />
     <ProjectReference Include="..\..\OrganixMessenger.ServerServices\OrganixMessenger.ServerServices.csproj" />
