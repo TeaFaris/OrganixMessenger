@@ -1,11 +1,14 @@
-﻿namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
+﻿using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Asn1.Ocsp;
+using OrganixMessenger.Shared.API.Requests;
+
+namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
 {
     public sealed class UserAuthenticationManager(
                 IUserRepository userRepository,
                 IEmailSender emailSender,
                 IHttpContextService httpContextService
-            )
-: IUserAuthenticationManager
+            ) : IUserAuthenticationManager
     {
         const int VerificationTokenLength = 64;
         const int PasswordResetExpiresMinutes = 15;
@@ -66,12 +69,40 @@
             await emailSender.SendEmailAsync(
                         newUser.Email,
                         $"Велкоме ту Организация.орг, {newUser.Username}.",
-                        $"""
-                        Как дела? Я тут слыхал ты получил разрешение на регестрацию?
-                        Вот твоя ссылочка для подтверждения: {verifyUrl}
-                        P.S. Я в подвале у Фариса, мне нужна твоя помощь, сайт не автоматизированный, он вас обмамнывает,
-                        мы тут работаем 24/7, нас кормят один раз в день. И смотритель этого подвала просто чудовище.
-                        Эта кошка держит нас всех в огромном страхе. СПАСИТЕ НАШИ ДУШИ
+                        $$"""
+                        <html>
+                        <head>
+                            <style>
+                                body {
+                                    font - family: Arial, sans-serif;
+                                    background-color: #f0f0f0;
+                                }
+                                h1 {
+                                    color: #333333;
+                                    text-align: center;
+                                }
+                                p {
+                                    color: #555555;
+                                    margin: 10px;
+                                }
+                                a {
+                                    color: #0066cc;
+                                    text-decoration: none;
+                                }
+                                a:hover {
+                                    text - decoration: underline;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <h1>Привет, друг!</h1>
+                            <p>Как дела? Я тут слыхал ты получил разрешение на регистрацию?</p>
+                            <p>Вот твоя ссылочка для подтверждения: <a href="{{verifyUrl}}">Жмакни сюды</a></p>
+                            <p>P.S. Я в подвале у Фариса, мне нужна твоя помощь, сайт не автоматизированный, он вас обманывает,
+                            мы тут работаем 24/7, нас кормят один раз в день. И смотритель этого подвала просто чудовище.
+                            Эта кошка держит нас всех в огромном страхе. СПАСИТЕ НАШИ ДУШИ</p>
+                        </body>
+                        </html>
                         """
                     );
 
@@ -83,7 +114,7 @@
             };
         }
 
-        public async Task<VerifyEmailResult> VerifyEmail(string code)
+        public async Task<VerifyEmailResult> ConfirmEmail(string code)
         {
             var user = await userRepository.FindFirstOrDefaultAsync(x => x.VereficationToken == code);
 
@@ -129,6 +160,15 @@
                 };
             }
 
+            if (!user.EmailConfirmed)
+            {
+                return new ForgotPasswordResult
+                {
+                    Successful = false,
+                    ErrorMessage = "You must confirm your email before you log in."
+                };
+            }
+
             if (user.PasswordResetToken is not null && DateTime.UtcNow < user.PasswordResetTokenExpires)
             {
                 return new ForgotPasswordResult
@@ -147,10 +187,39 @@
             await emailSender.SendEmailAsync(
                         user.Email,
                         $"Забыл пароль? Не проблема, {user.Username}.",
-                        $"""
-                        Перейди по ссылке чтобы поменять его: {changePasswordUrl}
-                        P.S. Больше не забывай его, а то я сижу тут в подвале и работаю, тут сыро, и мокро и из еды только кошачий корм...
-                        О нет, Фарис идёт... Забудь о том что ты только что прочитал.
+                        $$"""
+                        <html>
+                        <head>
+                            <style>
+                                body {
+                                    font-family: Arial, sans-serif;
+                                    background-color: #f0f0f0;
+                                }
+                                h1 {
+                                    color: #333333;
+                                    text-align: center;
+                                }
+                                p {
+                                    color: #555555;
+                                    margin: 10px;
+                                }
+                                a {
+                                    color: #0066cc;
+                                    text-decoration: none;
+                                }
+                                a:hover {
+                                    text-decoration: underline;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <h1>Давно не виделись, чел!</h1>
+                            <p>Перейди по ссылке чтобы поменять его: <a href="{{changePasswordUrl}}">Кликай сюды</a></p>
+                            <p>P.S. Больше не забывай его, а то я сижу тут в подвале и работаю, тут сыро, и мокро и из еды только кошачий корм...
+                            О нет, Фарис идёт... Забудь о том что ты только что прочитал.</p>
+                        </body>
+                        </html>
+                        
                         """
                     );
 

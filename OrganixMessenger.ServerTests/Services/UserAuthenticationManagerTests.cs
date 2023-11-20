@@ -159,7 +159,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new[] { user });
 
             // Act
-            var result = await userAuthenticationManager.VerifyEmail(code);
+            var result = await userAuthenticationManager.ConfirmEmail(code);
 
             // Assert
             Assert.True(result.Successful);
@@ -180,7 +180,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(Array.Empty<ApplicationUser>());
 
             // Act
-            var result = await userAuthenticationManager.VerifyEmail(code);
+            var result = await userAuthenticationManager.ConfirmEmail(code);
 
             // Assert
             Assert.False(result.Successful);
@@ -258,7 +258,8 @@ namespace OrganixMessenger.ServerTests.Services
             var email = "test@test.com";
             var user = new ApplicationUser
             {
-                Email = email
+                Email = email,
+                EmailConfirmed = true
             };
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
                 .ReturnsAsync(new[] { user });
@@ -303,6 +304,7 @@ namespace OrganixMessenger.ServerTests.Services
             var user = new ApplicationUser
             {
                 Email = email,
+                EmailConfirmed = true,
                 PasswordResetToken = "some-token",
                 PasswordResetTokenExpires = DateTime.UtcNow.AddMinutes(10)
             };
@@ -320,6 +322,31 @@ namespace OrganixMessenger.ServerTests.Services
         }
 
         [Fact]
+        public async Task ForgotPassword_Should_Return_Failure_If_User_Email_Is_Not_Confirmed()
+        {
+            // Arrange
+            var email = "test@test.com";
+            var user = new ApplicationUser
+            {
+                Email = email,
+                EmailConfirmed = false,
+                PasswordResetToken = "some-token",
+                PasswordResetTokenExpires = DateTime.UtcNow.AddMinutes(10)
+            };
+            userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
+                .ReturnsAsync(new[] { user });
+
+            // Act
+            var result = await userAuthenticationManager.ForgotPassword(email);
+
+            // Assert
+            Assert.False(result.Successful);
+            Assert.Equal("You must confirm your email before you log in.", result.ErrorMessage);
+            userRepositoryMock.Verify(x => x.SaveAsync(), Times.Never);
+            emailSenderMock.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
         public async Task ChangePassword_Should_Return_Success_If_Valid_Token_And_New_Password()
         {
             // Arrange
@@ -328,6 +355,7 @@ namespace OrganixMessenger.ServerTests.Services
             var user = new ApplicationUser
             {
                 PasswordResetToken = code,
+                EmailConfirmed = true,
                 PasswordResetTokenExpires = DateTime.UtcNow.AddMinutes(10)
             };
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))

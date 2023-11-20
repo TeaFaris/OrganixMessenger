@@ -6,6 +6,7 @@ using OrganixMessenger.Controllers.Util;
 using OrganixMessenger.ServerConfigurations;
 using OrganixMessenger.ServerData;
 using OrganixMessenger.ServerServices.EmailServices;
+using OrganixMessenger.ServerServices.HttpContextServices;
 using OrganixMessenger.ServerServices.JWTTokenGeneratorService;
 using OrganixMessenger.ServerServices.Repositories.RefreshTokenRepositories;
 using OrganixMessenger.ServerServices.Repositories.UserRepositories;
@@ -19,7 +20,7 @@ var config = builder.Configuration;
 builder.Services
     .Configure<JWTSettings>(config.GetSection(nameof(JWTSettings)));
 builder.Services
-    .Configure<EmailServceSettings>(config.GetSection(nameof(EmailServceSettings)));
+    .Configure<EmailServiceSettings>(config.GetSection(nameof(EmailServiceSettings)));
 
 // Blazor services
 builder.Services.AddRazorComponents()
@@ -30,6 +31,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(Responses).Assembly);
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpContextAccessor();
 
 // JWT Authentication
 var key = Encoding.UTF8.GetBytes(config["JWTSettings:Key"]!);
@@ -72,14 +74,17 @@ builder.Services
 
 //// Authentication
 builder.Services
-    .AddScoped<JWTTokenGenerator>();
+    .AddScoped<IJWTTokenGenerator, JWTTokenGenerator>();
 
 builder.Services
-    .AddScoped<UserAuthenticationManager>();
+    .AddScoped<IUserAuthenticationManager, UserAuthenticationManager>();
 
 //// Other
 builder.Services
     .AddSingleton<IEmailSender, SmtpEmailSender>();
+
+builder.Services
+    .AddSingleton<IHttpContextService, HttpContextService>();
 
 // API Versioning
 builder.Services

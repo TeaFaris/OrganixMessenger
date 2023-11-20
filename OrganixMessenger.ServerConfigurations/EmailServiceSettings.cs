@@ -2,7 +2,7 @@
 
 namespace OrganixMessenger.ServerConfigurations
 {
-    public sealed class EmailServceSettings
+    public sealed class EmailServiceSettings
     {
         [Required]
         public string Username { get; init; }

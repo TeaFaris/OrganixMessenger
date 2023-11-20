@@ -6,7 +6,7 @@
         Task<ForgotPasswordResult> ForgotPassword(string email);
         Task<RegisterUserResult> Register(string username, string email, string password, Role role);
         Task<ApplicationUser?> ValidateCredentials(string username, string password);
-        Task<VerifyEmailResult> VerifyEmail(string code);
+        Task<VerifyEmailResult> ConfirmEmail(string code);
     }
 
     public sealed class RegisterUserResult
