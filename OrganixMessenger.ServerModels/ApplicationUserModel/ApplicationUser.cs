@@ -1,7 +1,4 @@
-﻿using OrganixMessenger.Shared;
-using System.ComponentModel.DataAnnotations;
-
-namespace OrganixMessenger.ServerModels.ApplicationUserModel
+﻿namespace OrganixMessenger.ServerModels.ApplicationUserModel
 {
     public sealed class ApplicationUser
     {

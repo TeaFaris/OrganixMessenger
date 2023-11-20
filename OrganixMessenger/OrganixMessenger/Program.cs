@@ -1,9 +1,12 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using OrganixMessenger.Base;
+using OrganixMessenger.Controllers.Util;
 using OrganixMessenger.ServerConfigurations;
 using OrganixMessenger.ServerData;
 using OrganixMessenger.ServerServices.EmailServices;
+using OrganixMessenger.ServerServices.HttpContextServices;
 using OrganixMessenger.ServerServices.JWTTokenGeneratorService;
 using OrganixMessenger.ServerServices.Repositories.RefreshTokenRepositories;
 using OrganixMessenger.ServerServices.Repositories.UserRepositories;
@@ -17,7 +20,7 @@ var config = builder.Configuration;
 builder.Services
     .Configure<JWTSettings>(config.GetSection(nameof(JWTSettings)));
 builder.Services
-    .Configure<EmailServceSettings>(config.GetSection(nameof(EmailServceSettings)));
+    .Configure<EmailServiceSettings>(config.GetSection(nameof(EmailServiceSettings)));
 
 // Blazor services
 builder.Services.AddRazorComponents()
@@ -25,7 +28,10 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 // ASP.NET services
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddApplicationPart(typeof(Responses).Assembly);
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpContextAccessor();
 
 // JWT Authentication
 var key = Encoding.UTF8.GetBytes(config["JWTSettings:Key"]!);
@@ -68,14 +74,29 @@ builder.Services
 
 //// Authentication
 builder.Services
-    .AddScoped<JWTTokenGenerator>();
+    .AddScoped<IJWTTokenGenerator, JWTTokenGenerator>();
 
 builder.Services
-    .AddScoped<UserAuthenticationManager>();
+    .AddScoped<IUserAuthenticationManager, UserAuthenticationManager>();
 
 //// Other
 builder.Services
     .AddSingleton<IEmailSender, SmtpEmailSender>();
+
+builder.Services
+    .AddSingleton<IHttpContextService, HttpContextService>();
+
+// API Versioning
+builder.Services
+       .AddApiVersioning(options =>
+       {
+           options.AssumeDefaultVersionWhenUnspecified = true;
+           options.DefaultApiVersion = new ApiVersion(1, 0);
+           options.ReportApiVersions = true;
+           options.ApiVersionReader = ApiVersionReader.Combine(
+                   new HeaderApiVersionReader("X-Version")
+               );
+       });
 
 var app = builder.Build();
 

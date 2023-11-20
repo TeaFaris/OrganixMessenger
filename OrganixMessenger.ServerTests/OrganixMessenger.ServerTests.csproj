@@ -24,7 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OrganixMessenger.Controllers\OrganixMessenger.Controllers.csproj" />
     <ProjectReference Include="..\OrganixMessenger.ServerServices\OrganixMessenger.ServerServices.csproj" />
+    <ProjectReference Include="..\OrganixMessenger.Shared\OrganixMessenger.Shared.csproj" />
   </ItemGroup>
 
 </Project>

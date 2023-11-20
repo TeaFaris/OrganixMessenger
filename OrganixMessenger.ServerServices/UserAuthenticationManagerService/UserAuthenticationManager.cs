@@ -1,15 +1,19 @@
-﻿namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
+﻿using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Asn1.Ocsp;
+using OrganixMessenger.Shared.API.Requests;
+
+namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
 {
     public sealed class UserAuthenticationManager(
                 IUserRepository userRepository,
                 IEmailSender emailSender,
                 IHttpContextService httpContextService
-            )
+            ) : IUserAuthenticationManager
     {
         const int VerificationTokenLength = 64;
         const int PasswordResetExpiresMinutes = 15;
 
-        public async Task<RegisterUserResult> Register(string username, string email, string password, Role role)
+        public async Task<RegisterUserResult> RegisterAsync(string username, string email, string password, Role role)
         {
             var errors = new List<string>();
 
@@ -65,12 +69,40 @@
             await emailSender.SendEmailAsync(
                         newUser.Email,
                         $"Велкоме ту Организация.орг, {newUser.Username}.",
-                        $"""
-                        Как дела? Я тут слыхал ты получил разрешение на регестрацию?
-                        Вот твоя ссылочка для подтверждения: {verifyUrl}
-                        P.S. Я в подвале у Фариса, мне нужна твоя помощь, сайт не автоматизированный, он вас обмамнывает,
-                        мы тут работаем 24/7, нас кормят один раз в день. И смотритель этого подвала просто чудовище.
-                        Эта кошка держит нас всех в огромном страхе. СПАСИТЕ НАШИ ДУШИ
+                        $$"""
+                        <html>
+                        <head>
+                            <style>
+                                body {
+                                    font - family: Arial, sans-serif;
+                                    background-color: #f0f0f0;
+                                }
+                                h1 {
+                                    color: #333333;
+                                    text-align: center;
+                                }
+                                p {
+                                    color: #555555;
+                                    margin: 10px;
+                                }
+                                a {
+                                    color: #0066cc;
+                                    text-decoration: none;
+                                }
+                                a:hover {
+                                    text - decoration: underline;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <h1>Привет, друг!</h1>
+                            <p>Как дела? Я тут слыхал ты получил разрешение на регистрацию?</p>
+                            <p>Вот твоя ссылочка для подтверждения: <a href="{{verifyUrl}}">Жмакни сюды</a></p>
+                            <p>P.S. Я в подвале у Фариса, мне нужна твоя помощь, сайт не автоматизированный, он вас обманывает,
+                            мы тут работаем 24/7, нас кормят один раз в день. И смотритель этого подвала просто чудовище.
+                            Эта кошка держит нас всех в огромном страхе. СПАСИТЕ НАШИ ДУШИ</p>
+                        </body>
+                        </html>
                         """
                     );
 
@@ -82,13 +114,13 @@
             };
         }
 
-        public async Task<VerifyEmailResult> VerifyEmail(string code)
+        public async Task<ConfirmEmailResult> ConfirmEmailAsync(string code)
         {
             var user = await userRepository.FindFirstOrDefaultAsync(x => x.VereficationToken == code);
 
             if (user is null)
             {
-                return new VerifyEmailResult
+                return new ConfirmEmailResult
                 {
                     Successful = false
                 };
@@ -98,13 +130,14 @@
 
             await userRepository.SaveAsync();
 
-            return new VerifyEmailResult
+            return new ConfirmEmailResult
             {
-                Successful = true
+                Successful = true,
+                User = user
             };
         }
 
-        public async Task<ApplicationUser?> ValidateCredentials(string username, string password)
+        public async Task<ApplicationUser?> ValidateCredentialsAsync(string username, string password)
         {
             var usersFound = await userRepository.FindAsync(x => x.Username == username);
 
@@ -115,7 +148,7 @@
             return isValidPassword ? user : null;
         }
 
-        public async Task<ForgotPasswordResult> ForgotPassword(string email)
+        public async Task<ForgotPasswordResult> ForgotPasswordAsync(string email)
         {
             var user = await userRepository.FindFirstOrDefaultAsync(x => x.Email == email);
 
@@ -125,6 +158,15 @@
                 {
                     Successful = false,
                     ErrorMessage = "User with this email does not exist."
+                };
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                return new ForgotPasswordResult
+                {
+                    Successful = false,
+                    ErrorMessage = "You must confirm your email before you log in."
                 };
             }
 
@@ -146,10 +188,39 @@
             await emailSender.SendEmailAsync(
                         user.Email,
                         $"Забыл пароль? Не проблема, {user.Username}.",
-                        $"""
-                        Перейди по ссылке чтобы поменять его: {changePasswordUrl}
-                        P.S. Больше не забывай его, а то я сижу тут в подвале и работаю, тут сыро, и мокро и из еды только кошачий корм...
-                        О нет, Фарис идёт... Забудь о том что ты только что прочитал.
+                        $$"""
+                        <html>
+                        <head>
+                            <style>
+                                body {
+                                    font-family: Arial, sans-serif;
+                                    background-color: #f0f0f0;
+                                }
+                                h1 {
+                                    color: #333333;
+                                    text-align: center;
+                                }
+                                p {
+                                    color: #555555;
+                                    margin: 10px;
+                                }
+                                a {
+                                    color: #0066cc;
+                                    text-decoration: none;
+                                }
+                                a:hover {
+                                    text-decoration: underline;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <h1>Давно не виделись, чел!</h1>
+                            <p>Перейди по ссылке чтобы поменять его: <a href="{{changePasswordUrl}}">Кликай сюды</a></p>
+                            <p>P.S. Больше не забывай его, а то я сижу тут в подвале и работаю, тут сыро, и мокро и из еды только кошачий корм...
+                            О нет, Фарис идёт... Забудь о том что ты только что прочитал.</p>
+                        </body>
+                        </html>
+                        
                         """
                     );
 
@@ -159,7 +230,7 @@
             };
         }
 
-        public async Task<ChangePasswordResult> ChangePassword(string code, string newPassword)
+        public async Task<ChangePasswordResult> ChangePasswordAsync(string code, string newPassword)
         {
             var user = await userRepository.FindFirstOrDefaultAsync(x => x.PasswordResetToken == code);
 
@@ -177,7 +248,8 @@
 
             return new ChangePasswordResult
             {
-                Successful = true
+                Successful = true,
+                User = user
             };
         }
 
@@ -186,29 +258,6 @@
         {
             var randomBytes = RandomNumberGenerator.GetBytes(VerificationTokenLength);
             return Convert.ToHexString(randomBytes);
-        }
-
-        public sealed class RegisterUserResult
-        {
-            public bool Successful { get; init; }
-            public IEnumerable<string> Errors { get; init; }
-            public ApplicationUser? User { get; init; }
-        }
-
-        public sealed class VerifyEmailResult
-        {
-            public bool Successful { get; init; }
-        }
-
-        public sealed class ChangePasswordResult
-        {
-            public bool Successful { get; init; }
-        }
-
-        public sealed class ForgotPasswordResult
-        {
-            public bool Successful { get; init; }
-            public string? ErrorMessage { get; init; }
         }
     }
 }

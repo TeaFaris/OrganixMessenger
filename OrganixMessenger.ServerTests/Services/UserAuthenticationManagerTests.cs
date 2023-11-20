@@ -48,7 +48,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .Callback<ApplicationUser>(user => expectedUser = user);
 
             // Act
-            var result = await userAuthenticationManager.Register(username, email, password, role);
+            var result = await userAuthenticationManager.RegisterAsync(username, email, password, role);
 
             // Assert
             Assert.True(result.Successful);
@@ -88,7 +88,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new List<ApplicationUser> { existingUser });
 
             // Act
-            var result = await userAuthenticationManager.Register(username, email, password, role);
+            var result = await userAuthenticationManager.RegisterAsync(username, email, password, role);
 
             // Assert
             Assert.False(result.Successful);
@@ -121,7 +121,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(Enumerable.Empty<ApplicationUser>());
 
             // Act
-            var result = await userAuthenticationManager.Register(username, email, password, role);
+            var result = await userAuthenticationManager.RegisterAsync(username, email, password, role);
 
             // Assert
             Assert.False(result.Successful);
@@ -159,7 +159,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new[] { user });
 
             // Act
-            var result = await userAuthenticationManager.VerifyEmail(code);
+            var result = await userAuthenticationManager.ConfirmEmailAsync(code);
 
             // Assert
             Assert.True(result.Successful);
@@ -180,7 +180,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(Array.Empty<ApplicationUser>());
 
             // Act
-            var result = await userAuthenticationManager.VerifyEmail(code);
+            var result = await userAuthenticationManager.ConfirmEmailAsync(code);
 
             // Assert
             Assert.False(result.Successful);
@@ -205,7 +205,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new[] { user });
 
             // Act
-            var result = await userAuthenticationManager.ValidateCredentials(username, password);
+            var result = await userAuthenticationManager.ValidateCredentialsAsync(username, password);
 
             // Assert
             Assert.NotNull(result);
@@ -229,7 +229,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new[] { user });
 
             // Act
-            var result = await userAuthenticationManager.ValidateCredentials(username, wrongPassword);
+            var result = await userAuthenticationManager.ValidateCredentialsAsync(username, wrongPassword);
 
             // Assert
             Assert.Null(result);
@@ -245,7 +245,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(Array.Empty<ApplicationUser>());
 
             // Act
-            var result = await userAuthenticationManager.ValidateCredentials(username, password);
+            var result = await userAuthenticationManager.ValidateCredentialsAsync(username, password);
 
             // Assert
             Assert.Null(result);
@@ -258,7 +258,8 @@ namespace OrganixMessenger.ServerTests.Services
             var email = "test@test.com";
             var user = new ApplicationUser
             {
-                Email = email
+                Email = email,
+                EmailConfirmed = true
             };
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
                 .ReturnsAsync(new[] { user });
@@ -268,7 +269,7 @@ namespace OrganixMessenger.ServerTests.Services
             httpContextServiceMock.Setup(x => x.GetBaseUrl()).Returns("http://localhost");
 
             // Act
-            var result = await userAuthenticationManager.ForgotPassword(email);
+            var result = await userAuthenticationManager.ForgotPasswordAsync(email);
 
             // Assert
             Assert.True(result.Successful);
@@ -286,7 +287,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(Array.Empty<ApplicationUser>());
 
             // Act
-            var result = await userAuthenticationManager.ForgotPassword(email);
+            var result = await userAuthenticationManager.ForgotPasswordAsync(email);
 
             // Assert
             Assert.False(result.Successful);
@@ -303,6 +304,7 @@ namespace OrganixMessenger.ServerTests.Services
             var user = new ApplicationUser
             {
                 Email = email,
+                EmailConfirmed = true,
                 PasswordResetToken = "some-token",
                 PasswordResetTokenExpires = DateTime.UtcNow.AddMinutes(10)
             };
@@ -310,11 +312,36 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new[] { user });
 
             // Act
-            var result = await userAuthenticationManager.ForgotPassword(email);
+            var result = await userAuthenticationManager.ForgotPasswordAsync(email);
 
             // Assert
             Assert.False(result.Successful);
             Assert.Equal("You already requested password change. Wait until it expires before requesting a new one.", result.ErrorMessage);
+            userRepositoryMock.Verify(x => x.SaveAsync(), Times.Never);
+            emailSenderMock.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task ForgotPassword_Should_Return_Failure_If_User_Email_Is_Not_Confirmed()
+        {
+            // Arrange
+            var email = "test@test.com";
+            var user = new ApplicationUser
+            {
+                Email = email,
+                EmailConfirmed = false,
+                PasswordResetToken = "some-token",
+                PasswordResetTokenExpires = DateTime.UtcNow.AddMinutes(10)
+            };
+            userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
+                .ReturnsAsync(new[] { user });
+
+            // Act
+            var result = await userAuthenticationManager.ForgotPasswordAsync(email);
+
+            // Assert
+            Assert.False(result.Successful);
+            Assert.Equal("You must confirm your email before you log in.", result.ErrorMessage);
             userRepositoryMock.Verify(x => x.SaveAsync(), Times.Never);
             emailSenderMock.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
@@ -328,6 +355,7 @@ namespace OrganixMessenger.ServerTests.Services
             var user = new ApplicationUser
             {
                 PasswordResetToken = code,
+                EmailConfirmed = true,
                 PasswordResetTokenExpires = DateTime.UtcNow.AddMinutes(10)
             };
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
@@ -335,7 +363,7 @@ namespace OrganixMessenger.ServerTests.Services
             userRepositoryMock.Setup(x => x.SaveAsync()).Returns(Task.CompletedTask);
 
             // Act
-            var result = await userAuthenticationManager.ChangePassword(code, newPassword);
+            var result = await userAuthenticationManager.ChangePasswordAsync(code, newPassword);
 
             // Assert
             Assert.True(result.Successful);
@@ -353,7 +381,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(Array.Empty<ApplicationUser>());
 
             // Act
-            var result = await userAuthenticationManager.ChangePassword(code, newPassword);
+            var result = await userAuthenticationManager.ChangePasswordAsync(code, newPassword);
 
             // Assert
             Assert.False(result.Successful);
@@ -375,7 +403,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new[] { user });
 
             // Act
-            var result = await userAuthenticationManager.ChangePassword(code, newPassword);
+            var result = await userAuthenticationManager.ChangePasswordAsync(code, newPassword);
 
             // Assert
             Assert.False(result.Successful);

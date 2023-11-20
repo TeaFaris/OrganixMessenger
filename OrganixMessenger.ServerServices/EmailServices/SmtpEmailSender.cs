@@ -1,26 +1,30 @@
-﻿using Microsoft.Extensions.Options;
-using OrganixMessenger.ServerConfigurations;
-using System.Net;
-using System.Net.Mail;
+﻿using MailKit.Net.Smtp;
+using MimeKit;
+using MimeKit.Text;
 
 namespace OrganixMessenger.ServerServices.EmailServices
 {
-    public sealed class SmtpEmailSender(IOptions<EmailServceSettings> emailConfiguration) : IEmailSender
+    public sealed class SmtpEmailSender(IOptions<EmailServiceSettings> emailConfiguration) : IEmailSender
     {
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            using var client = new SmtpClient(emailConfiguration.Value.Host, emailConfiguration.Value.Port)
+            var mail = new MimeMessage();
+
+            mail.From.Add(MailboxAddress.Parse(emailConfiguration.Value.Username));
+            mail.To.Add(MailboxAddress.Parse(email));
+
+            mail.Subject = subject;
+            mail.Body = new TextPart(TextFormat.Html)
             {
-                EnableSsl = true,
-                Credentials = new NetworkCredential(emailConfiguration.Value.Username, emailConfiguration.Value.Password)
+                Text = htmlMessage
             };
 
-            return client.SendMailAsync(new MailMessage(
-                        from: emailConfiguration.Value.Username,
-                        to: email,
-                        subject: subject,
-                        body: htmlMessage
-                    ));
+            using var smtpClient = new SmtpClient();
+            
+            await smtpClient.ConnectAsync(emailConfiguration.Value.Host, emailConfiguration.Value.Port, true);
+            await smtpClient.AuthenticateAsync(emailConfiguration.Value.Username, emailConfiguration.Value.Password);
+            await smtpClient.SendAsync(mail);
+            await smtpClient.DisconnectAsync(true);
         }
     }
 }
