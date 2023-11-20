@@ -13,7 +13,7 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
         const int VerificationTokenLength = 64;
         const int PasswordResetExpiresMinutes = 15;
 
-        public async Task<RegisterUserResult> Register(string username, string email, string password, Role role)
+        public async Task<RegisterUserResult> RegisterAsync(string username, string email, string password, Role role)
         {
             var errors = new List<string>();
 
@@ -114,13 +114,13 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
             };
         }
 
-        public async Task<VerifyEmailResult> ConfirmEmail(string code)
+        public async Task<ConfirmEmailResult> ConfirmEmailAsync(string code)
         {
             var user = await userRepository.FindFirstOrDefaultAsync(x => x.VereficationToken == code);
 
             if (user is null)
             {
-                return new VerifyEmailResult
+                return new ConfirmEmailResult
                 {
                     Successful = false
                 };
@@ -130,13 +130,14 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
 
             await userRepository.SaveAsync();
 
-            return new VerifyEmailResult
+            return new ConfirmEmailResult
             {
-                Successful = true
+                Successful = true,
+                User = user
             };
         }
 
-        public async Task<ApplicationUser?> ValidateCredentials(string username, string password)
+        public async Task<ApplicationUser?> ValidateCredentialsAsync(string username, string password)
         {
             var usersFound = await userRepository.FindAsync(x => x.Username == username);
 
@@ -147,7 +148,7 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
             return isValidPassword ? user : null;
         }
 
-        public async Task<ForgotPasswordResult> ForgotPassword(string email)
+        public async Task<ForgotPasswordResult> ForgotPasswordAsync(string email)
         {
             var user = await userRepository.FindFirstOrDefaultAsync(x => x.Email == email);
 
@@ -229,7 +230,7 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
             };
         }
 
-        public async Task<ChangePasswordResult> ChangePassword(string code, string newPassword)
+        public async Task<ChangePasswordResult> ChangePasswordAsync(string code, string newPassword)
         {
             var user = await userRepository.FindFirstOrDefaultAsync(x => x.PasswordResetToken == code);
 
@@ -247,7 +248,8 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
 
             return new ChangePasswordResult
             {
-                Successful = true
+                Successful = true,
+                User = user
             };
         }
 

@@ -48,7 +48,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .Callback<ApplicationUser>(user => expectedUser = user);
 
             // Act
-            var result = await userAuthenticationManager.Register(username, email, password, role);
+            var result = await userAuthenticationManager.RegisterAsync(username, email, password, role);
 
             // Assert
             Assert.True(result.Successful);
@@ -88,7 +88,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new List<ApplicationUser> { existingUser });
 
             // Act
-            var result = await userAuthenticationManager.Register(username, email, password, role);
+            var result = await userAuthenticationManager.RegisterAsync(username, email, password, role);
 
             // Assert
             Assert.False(result.Successful);
@@ -121,7 +121,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(Enumerable.Empty<ApplicationUser>());
 
             // Act
-            var result = await userAuthenticationManager.Register(username, email, password, role);
+            var result = await userAuthenticationManager.RegisterAsync(username, email, password, role);
 
             // Assert
             Assert.False(result.Successful);
@@ -159,7 +159,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new[] { user });
 
             // Act
-            var result = await userAuthenticationManager.ConfirmEmail(code);
+            var result = await userAuthenticationManager.ConfirmEmailAsync(code);
 
             // Assert
             Assert.True(result.Successful);
@@ -180,7 +180,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(Array.Empty<ApplicationUser>());
 
             // Act
-            var result = await userAuthenticationManager.ConfirmEmail(code);
+            var result = await userAuthenticationManager.ConfirmEmailAsync(code);
 
             // Assert
             Assert.False(result.Successful);
@@ -205,7 +205,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new[] { user });
 
             // Act
-            var result = await userAuthenticationManager.ValidateCredentials(username, password);
+            var result = await userAuthenticationManager.ValidateCredentialsAsync(username, password);
 
             // Assert
             Assert.NotNull(result);
@@ -229,7 +229,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new[] { user });
 
             // Act
-            var result = await userAuthenticationManager.ValidateCredentials(username, wrongPassword);
+            var result = await userAuthenticationManager.ValidateCredentialsAsync(username, wrongPassword);
 
             // Assert
             Assert.Null(result);
@@ -245,7 +245,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(Array.Empty<ApplicationUser>());
 
             // Act
-            var result = await userAuthenticationManager.ValidateCredentials(username, password);
+            var result = await userAuthenticationManager.ValidateCredentialsAsync(username, password);
 
             // Assert
             Assert.Null(result);
@@ -269,7 +269,7 @@ namespace OrganixMessenger.ServerTests.Services
             httpContextServiceMock.Setup(x => x.GetBaseUrl()).Returns("http://localhost");
 
             // Act
-            var result = await userAuthenticationManager.ForgotPassword(email);
+            var result = await userAuthenticationManager.ForgotPasswordAsync(email);
 
             // Assert
             Assert.True(result.Successful);
@@ -287,7 +287,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(Array.Empty<ApplicationUser>());
 
             // Act
-            var result = await userAuthenticationManager.ForgotPassword(email);
+            var result = await userAuthenticationManager.ForgotPasswordAsync(email);
 
             // Assert
             Assert.False(result.Successful);
@@ -312,7 +312,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new[] { user });
 
             // Act
-            var result = await userAuthenticationManager.ForgotPassword(email);
+            var result = await userAuthenticationManager.ForgotPasswordAsync(email);
 
             // Assert
             Assert.False(result.Successful);
@@ -337,7 +337,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new[] { user });
 
             // Act
-            var result = await userAuthenticationManager.ForgotPassword(email);
+            var result = await userAuthenticationManager.ForgotPasswordAsync(email);
 
             // Assert
             Assert.False(result.Successful);
@@ -363,7 +363,7 @@ namespace OrganixMessenger.ServerTests.Services
             userRepositoryMock.Setup(x => x.SaveAsync()).Returns(Task.CompletedTask);
 
             // Act
-            var result = await userAuthenticationManager.ChangePassword(code, newPassword);
+            var result = await userAuthenticationManager.ChangePasswordAsync(code, newPassword);
 
             // Assert
             Assert.True(result.Successful);
@@ -381,7 +381,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(Array.Empty<ApplicationUser>());
 
             // Act
-            var result = await userAuthenticationManager.ChangePassword(code, newPassword);
+            var result = await userAuthenticationManager.ChangePasswordAsync(code, newPassword);
 
             // Assert
             Assert.False(result.Successful);
@@ -403,7 +403,7 @@ namespace OrganixMessenger.ServerTests.Services
                 .ReturnsAsync(new[] { user });
 
             // Act
-            var result = await userAuthenticationManager.ChangePassword(code, newPassword);
+            var result = await userAuthenticationManager.ChangePasswordAsync(code, newPassword);
 
             // Assert
             Assert.False(result.Successful);

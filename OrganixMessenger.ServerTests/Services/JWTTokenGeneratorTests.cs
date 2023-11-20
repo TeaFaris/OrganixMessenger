@@ -33,7 +33,7 @@
         }
 
         [Fact]
-        public async Task GenerateTokens_Should_Return_Valid_JWT_And_Refresh_Token()
+        public async Task GenerateTokens_ShouldReturnValidJWTAndRefreshToken()
         {
             // Act
             var tokens = await tokenGenerator.GenerateTokens(testUser);
@@ -65,7 +65,7 @@
         }
 
         [Fact]
-        public async Task VerifyAndGenerateTokens_Should_Return_New_Tokens_If_Refresh_Token_Is_Valid()
+        public async Task VerifyAndGenerateTokens_ShouldReturnNewTokens_WhenRefreshTokenIsValid()
         {
             // Arrange
             RefreshToken oldRefreshToken = null!;
@@ -92,7 +92,7 @@
         }
 
         [Fact]
-        public async Task VerifyAndGenerateTokens_Should_Return_Null_If_Refresh_Token_Is_Not_Found()
+        public async Task VerifyAndGenerateTokens_ShouldReturnNull_WhenRefreshTokenIsNotFound()
         {
             // Arrange
             var invalidRefreshToken = "invalid_token";
@@ -105,7 +105,7 @@
         }
 
         [Fact]
-        public async Task VerifyAndGenerateTokens_Should_Return_Null_If_Refresh_Token_Is_Expired()
+        public async Task VerifyAndGenerateTokens_ShouldReturnNull_WhenRefreshTokenIsExpired()
         {
             // Arrange
             RefreshToken oldRefreshToken = null!;

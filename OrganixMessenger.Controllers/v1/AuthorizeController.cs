@@ -24,7 +24,7 @@
                 return Responses.BadRequest($"Registration is possible only using the @{Request.Host.Value} email.");
             }
 
-            var result = await authenticationManager.Register(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User);
+            var result = await authenticationManager.RegisterAsync(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User);
 
             if (!result.Successful)
             {
@@ -45,7 +45,7 @@
         [HttpPost]
         public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
         {
-            var user = await authenticationManager.ValidateCredentials(loginRequest.Username, loginRequest.Password);
+            var user = await authenticationManager.ValidateCredentialsAsync(loginRequest.Username, loginRequest.Password);
 
             if (user is null)
             {
@@ -121,7 +121,7 @@
         [HttpPost]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordRequest request)
         {
-            var forgotPasswordResult = await authenticationManager.ForgotPassword(request.Email);
+            var forgotPasswordResult = await authenticationManager.ForgotPasswordAsync(request.Email);
 
             if (!forgotPasswordResult.Successful)
             {

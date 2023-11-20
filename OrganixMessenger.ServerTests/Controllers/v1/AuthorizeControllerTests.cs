@@ -24,6 +24,15 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
             jwtTokenGeneratorMock = new Mock<IJWTTokenGenerator>();
             var loggerMock = new Mock<ILogger<AuthorizeController>>();
             controller = new AuthorizeController(authenticationManagerMock.Object, jwtTokenGeneratorMock.Object, loggerMock.Object);
+
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    Connection = { RemoteIpAddress = IPAddress.Parse(Ip) },
+                    Request = { Host = new HostString("test.com") }
+                }
+            };
         }
 
         [Fact]
@@ -46,23 +55,15 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
                     Role = Role.User
                 }
             };
-            authenticationManagerMock.Setup(m => m.Register(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User))
+            authenticationManagerMock.Setup(m => m.RegisterAsync(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User))
                 .ReturnsAsync(registerResult);
-            controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext
-                {
-                    Connection = { RemoteIpAddress = IPAddress.Parse(Ip) },
-                    Request = { Host = new HostString("test.com") }
-                }
-            };
 
             // Act
             var result = await controller.Register(registerRequest);
 
             // Assert
             Assert.IsType<OkResult>(result);
-            authenticationManagerMock.Verify(m => m.Register(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User), Times.Once);
+            authenticationManagerMock.Verify(m => m.RegisterAsync(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User), Times.Once);
         }
 
         [Fact]
@@ -80,16 +81,8 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
                 Successful = false,
                 Errors = new[] { "Username already exists." }
             };
-            authenticationManagerMock.Setup(m => m.Register(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User))
+            authenticationManagerMock.Setup(m => m.RegisterAsync(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User))
                 .ReturnsAsync(registerResult);
-            controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext
-                {
-                    Connection = { RemoteIpAddress = IPAddress.Parse(Ip) },
-                    Request = { Host = new HostString("test.com") }
-                }
-            };
 
             // Act
             var result = await controller.Register(registerRequest);
@@ -98,7 +91,7 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
             Assert.IsType<BadRequestObjectResult>(result);
             var badRequestResult = result as BadRequestObjectResult;
             Assert.Equal(registerResult.Errors, badRequestResult.Value);
-            authenticationManagerMock.Verify(m => m.Register(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User), Times.Once);
+            authenticationManagerMock.Verify(m => m.RegisterAsync(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User), Times.Once);
         }
 
         [Fact]
@@ -112,15 +105,6 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
                 Password = "test123"
             };
 
-            controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext
-                {
-                    Connection = { RemoteIpAddress = IPAddress.Parse(Ip) },
-                    Request = { Host = new HostString("test.com") }
-                }
-            };
-
             // Act
             var result = await controller.Register(registerRequest);
 
@@ -129,7 +113,7 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
             var badRequestResult = result as BadRequestObjectResult;
             var msgResponse = badRequestResult.Value as MessageResponse;
             Assert.Equal("Registration is possible only using the @test.com email.", msgResponse.Message);
-            authenticationManagerMock.Verify(m => m.Register(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User), Times.Never);
+            authenticationManagerMock.Verify(m => m.RegisterAsync(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User), Times.Never);
         }
 
         [Fact]
@@ -153,17 +137,10 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
                 JWTToken = "jwt-token",
                 RefreshToken = RefreshTokenValue
             };
-            authenticationManagerMock.Setup(m => m.ValidateCredentials(loginRequest.Username, loginRequest.Password))
+            authenticationManagerMock.Setup(m => m.ValidateCredentialsAsync(loginRequest.Username, loginRequest.Password))
                 .ReturnsAsync(user);
             jwtTokenGeneratorMock.Setup(m => m.GenerateTokens(user))
                 .ReturnsAsync(tokens);
-            controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext
-                {
-                    Connection = { RemoteIpAddress = IPAddress.Parse(Ip) }
-                }
-            };
 
             // Act
             var result = await controller.Login(loginRequest);
@@ -173,7 +150,7 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
             var loginResponse = result.Value!;
             Assert.Equal(tokens.JWTToken, loginResponse.JWTToken);
             Assert.Equal(tokens.RefreshToken, loginResponse.RefreshToken);
-            authenticationManagerMock.Verify(m => m.ValidateCredentials(loginRequest.Username, loginRequest.Password), Times.Once);
+            authenticationManagerMock.Verify(m => m.ValidateCredentialsAsync(loginRequest.Username, loginRequest.Password), Times.Once);
             jwtTokenGeneratorMock.Verify(m => m.GenerateTokens(user), Times.Once);
         }
 
@@ -186,15 +163,8 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
                 Username = "testuser",
                 Password = "test123"
             };
-            authenticationManagerMock.Setup(m => m.ValidateCredentials(loginRequest.Username, loginRequest.Password))
+            authenticationManagerMock.Setup(m => m.ValidateCredentialsAsync(loginRequest.Username, loginRequest.Password))
                 .ReturnsAsync((ApplicationUser)null);
-            controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext
-                {
-                    Connection = { RemoteIpAddress = IPAddress.Parse(Ip) }
-                }
-            };
 
             // Act
             var result = await controller.Login(loginRequest);
@@ -204,7 +174,7 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
             var unauthorizedResult = result.Result as UnauthorizedObjectResult;
             var msgResponse = unauthorizedResult.Value as MessageResponse;
             Assert.Equal("Invalid credentials.", msgResponse.Message);
-            authenticationManagerMock.Verify(m => m.ValidateCredentials(loginRequest.Username, loginRequest.Password), Times.Once);
+            authenticationManagerMock.Verify(m => m.ValidateCredentialsAsync(loginRequest.Username, loginRequest.Password), Times.Once);
             jwtTokenGeneratorMock.Verify(m => m.GenerateTokens(It.IsAny<ApplicationUser>()), Times.Never);
         }
 
@@ -224,15 +194,8 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
                 Role = Role.User,
                 EmailConfirmed = false
             };
-            authenticationManagerMock.Setup(m => m.ValidateCredentials(loginRequest.Username, loginRequest.Password))
+            authenticationManagerMock.Setup(m => m.ValidateCredentialsAsync(loginRequest.Username, loginRequest.Password))
                 .ReturnsAsync(user);
-            controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext
-                {
-                    Connection = { RemoteIpAddress = IPAddress.Parse(Ip) }
-                }
-            };
 
             // Act
             var result = await controller.Login(loginRequest);
@@ -242,7 +205,7 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
             var unauthorizedResult = result.Result as UnauthorizedObjectResult;
             var msgResponse = unauthorizedResult.Value as MessageResponse;
             Assert.Equal("You must confirm your email before you log in.", msgResponse.Message);
-            authenticationManagerMock.Verify(m => m.ValidateCredentials(loginRequest.Username, loginRequest.Password), Times.Once);
+            authenticationManagerMock.Verify(m => m.ValidateCredentialsAsync(loginRequest.Username, loginRequest.Password), Times.Once);
             jwtTokenGeneratorMock.Verify(m => m.GenerateTokens(It.IsAny<ApplicationUser>()), Times.Never);
         }
 
@@ -320,15 +283,6 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
         [Fact]
         public async Task RefreshToken_ShouldReturnUnauthorized_WhenRefreshTokenIsMissing()
         {
-            // Arrange
-            controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext
-                {
-                    Connection = { RemoteIpAddress = IPAddress.Parse(Ip) }
-                }
-            };
-
             // Act
             var result = await controller.RefreshToken();
 
@@ -341,46 +295,30 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
         }
 
         [Fact]
-        public async Task ForgotPassword_WhenEmailIsValidAndResetSuccessful_ReturnsOk()
+        public async Task ForgotPassword_ShouldReturnOk_WhenEmailIsValidAndResetSuccessful()
         {
             // Arrange
-            controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext
-                {
-                    Connection = { RemoteIpAddress = IPAddress.Parse(Ip) }
-                }
-            };
-
             var email = "test@example.com";
             var request = new ForgotPasswordRequest { Email = email };
             var result = new ForgotPasswordResult { Successful = true };
-            authenticationManagerMock.Setup(x => x.ForgotPassword(email)).ReturnsAsync(result);
+            authenticationManagerMock.Setup(x => x.ForgotPasswordAsync(email)).ReturnsAsync(result);
 
             // Act
             var actionResult = await controller.ForgotPassword(request);
 
             // Assert
             Assert.IsType<OkResult>(actionResult);
-            authenticationManagerMock.Verify(x => x.ForgotPassword(email), Times.Once);
+            authenticationManagerMock.Verify(x => x.ForgotPasswordAsync(email), Times.Once);
         }
 
         [Fact]
-        public async Task ForgotPassword_WhenEmailIsValidAndResetUnsuccessful_ReturnsBadRequest()
+        public async Task ForgotPassword_ShouldReturnBadRequest_WhenEmailIsValidAndResetUnsuccessful()
         {
             // Arrange
-            controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext
-                {
-                    Connection = { RemoteIpAddress = IPAddress.Parse(Ip) }
-                }
-            };
-
             var email = "test@example.com";
             var request = new ForgotPasswordRequest { Email = email };
             var result = new ForgotPasswordResult { Successful = false, ErrorMessage = "Some error" };
-            authenticationManagerMock.Setup(x => x.ForgotPassword(email)).ReturnsAsync(result);
+            authenticationManagerMock.Setup(x => x.ForgotPasswordAsync(email)).ReturnsAsync(result);
 
             // Act
             var actionResult = await controller.ForgotPassword(request);
@@ -390,7 +328,7 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
             var badRequestObjectResult = actionResult as BadRequestObjectResult;
             var msgResponse = badRequestObjectResult.Value as MessageResponse;
             Assert.Equal(result.ErrorMessage, msgResponse.Message);
-            authenticationManagerMock.Verify(x => x.ForgotPassword(email), Times.Once);
+            authenticationManagerMock.Verify(x => x.ForgotPasswordAsync(email), Times.Once);
         }
     }
 }
