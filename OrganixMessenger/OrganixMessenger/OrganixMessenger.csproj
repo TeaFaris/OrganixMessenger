@@ -13,12 +13,14 @@
     <ProjectReference Include="..\..\OrganixMessenger.ServerData\OrganixMessenger.ServerData.csproj" />
     <ProjectReference Include="..\..\OrganixMessenger.ServerServices\OrganixMessenger.ServerServices.csproj" />
     <ProjectReference Include="..\OrganixMessenger.Client\OrganixMessenger.Client.csproj" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NSwag.AspNetCore" Version="14.0.0-preview010" />
   </ItemGroup>
 
 </Project>

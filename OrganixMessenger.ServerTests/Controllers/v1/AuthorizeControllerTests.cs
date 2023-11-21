@@ -79,7 +79,7 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
             var registerResult = new RegisterUserResult
             {
                 Successful = false,
-                Errors = new[] { "Username already exists." }
+                Errors = [ "Username already exists." ]
             };
             authenticationManagerMock.Setup(m => m.RegisterAsync(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User))
                 .ReturnsAsync(registerResult);

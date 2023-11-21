@@ -78,7 +78,7 @@
             var oldTokens = await tokenGenerator.GenerateTokens(testUser);
 
             mockRefreshTokenRepository.Setup(x => x.FindAsync(It.IsAny<Expression<Func<RefreshToken, bool>>>()))
-                .ReturnsAsync(new[] { oldRefreshToken });
+                .ReturnsAsync([ oldRefreshToken ]);
 
             // Act
             var newTokens = await tokenGenerator.VerifyAndGenerateTokens(oldTokens.RefreshToken);
@@ -118,7 +118,7 @@
             var oldTokens = await tokenGenerator.GenerateTokens(testUser);
 
             mockRefreshTokenRepository.Setup(x => x.FindAsync(It.IsAny<Expression<Func<RefreshToken, bool>>>()))
-                .ReturnsAsync(new[] { oldRefreshToken });
+                .ReturnsAsync([ oldRefreshToken ]);
 
             var expiredRefreshToken = (await mockRefreshTokenRepository.Object.FindFirstOrDefaultAsync(x => x.Token == oldTokens.RefreshToken))!;
             expiredRefreshToken.ExpiryDate = DateTime.UtcNow.AddDays(-1); // Set expiry date to yesterday

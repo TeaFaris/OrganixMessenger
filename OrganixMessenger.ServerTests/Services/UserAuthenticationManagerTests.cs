@@ -156,7 +156,7 @@ namespace OrganixMessenger.ServerTests.Services
             };
 
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
-                .ReturnsAsync(new[] { user });
+                .ReturnsAsync([ user ]);
 
             // Act
             var result = await userAuthenticationManager.ConfirmEmailAsync(code);
@@ -202,7 +202,7 @@ namespace OrganixMessenger.ServerTests.Services
                 PasswordHash = passwordHash
             };
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
-                .ReturnsAsync(new[] { user });
+                .ReturnsAsync([ user ]);
 
             // Act
             var result = await userAuthenticationManager.ValidateCredentialsAsync(username, password);
@@ -226,7 +226,7 @@ namespace OrganixMessenger.ServerTests.Services
                 PasswordHash = passwordHash
             };
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
-                .ReturnsAsync(new[] { user });
+                .ReturnsAsync([ user ]);
 
             // Act
             var result = await userAuthenticationManager.ValidateCredentialsAsync(username, wrongPassword);
@@ -262,7 +262,7 @@ namespace OrganixMessenger.ServerTests.Services
                 EmailConfirmed = true
             };
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
-                .ReturnsAsync(new[] { user });
+                .ReturnsAsync([ user ]);
             userRepositoryMock.Setup(x => x.SaveAsync()).Returns(Task.CompletedTask);
             emailSenderMock.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.CompletedTask);
@@ -309,7 +309,7 @@ namespace OrganixMessenger.ServerTests.Services
                 PasswordResetTokenExpires = DateTime.UtcNow.AddMinutes(10)
             };
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
-                .ReturnsAsync(new[] { user });
+                .ReturnsAsync([ user ]);
 
             // Act
             var result = await userAuthenticationManager.ForgotPasswordAsync(email);
@@ -334,7 +334,7 @@ namespace OrganixMessenger.ServerTests.Services
                 PasswordResetTokenExpires = DateTime.UtcNow.AddMinutes(10)
             };
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
-                .ReturnsAsync(new[] { user });
+                .ReturnsAsync([ user ]);
 
             // Act
             var result = await userAuthenticationManager.ForgotPasswordAsync(email);
@@ -359,7 +359,7 @@ namespace OrganixMessenger.ServerTests.Services
                 PasswordResetTokenExpires = DateTime.UtcNow.AddMinutes(10)
             };
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
-                .ReturnsAsync(new[] { user });
+                .ReturnsAsync([ user ]);
             userRepositoryMock.Setup(x => x.SaveAsync()).Returns(Task.CompletedTask);
 
             // Act
@@ -400,7 +400,7 @@ namespace OrganixMessenger.ServerTests.Services
                 PasswordResetTokenExpires = DateTime.UtcNow.AddMinutes(-10)
             };
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
-                .ReturnsAsync(new[] { user });
+                .ReturnsAsync([ user ]);
 
             // Act
             var result = await userAuthenticationManager.ChangePasswordAsync(code, newPassword);

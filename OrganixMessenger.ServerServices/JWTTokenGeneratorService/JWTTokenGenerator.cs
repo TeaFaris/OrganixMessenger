@@ -72,14 +72,14 @@
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
-            {
+            Claim[] claims = 
+            [
                 new Claim(ClaimTypes.NameIdentifier, applicationUser.Id.ToString()),
                 new Claim(ClaimTypes.Name, applicationUser.Username),
                 new Claim(ClaimTypes.Email, applicationUser.Email),
                 new Claim(ClaimTypes.Role, applicationUser.Role.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+            ];
 
             var token = new JwtSecurityToken(
                     jwtSettings.Issuer,

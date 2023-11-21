@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Text.Json;
-
-namespace OrganixMessenger.Controllers.Util
+﻿namespace OrganixMessenger.Controllers.Util
 {
     public static class Responses
     {
