@@ -17,9 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganixMessenger.ServerMode
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganixMessenger.ServerServices", "OrganixMessenger.ServerServices\OrganixMessenger.ServerServices.csproj", "{831EA311-7251-4FC7-AAB7-D742B4AC63E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrganixMessenger.ServerTests", "OrganixMessenger.ServerTests\OrganixMessenger.ServerTests.csproj", "{FFDD8720-0C32-4B00-A22F-8BC77D8972AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganixMessenger.ServerTests", "OrganixMessenger.ServerTests\OrganixMessenger.ServerTests.csproj", "{FFDD8720-0C32-4B00-A22F-8BC77D8972AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrganixMessenger.Controllers", "OrganixMessenger.Controllers\OrganixMessenger.Controllers.csproj", "{096D3328-6075-49F3-9416-AB5EFB6EED5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganixMessenger.Controllers", "OrganixMessenger.Controllers\OrganixMessenger.Controllers.csproj", "{096D3328-6075-49F3-9416-AB5EFB6EED5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrganixMessenger.Documentation", "OrganixMessenger.Documentation\OrganixMessenger.Documentation.csproj", "{9A211FE7-BD3D-476D-8ECD-EA33E9B13EC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{096D3328-6075-49F3-9416-AB5EFB6EED5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{096D3328-6075-49F3-9416-AB5EFB6EED5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{096D3328-6075-49F3-9416-AB5EFB6EED5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A211FE7-BD3D-476D-8ECD-EA33E9B13EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A211FE7-BD3D-476D-8ECD-EA33E9B13EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A211FE7-BD3D-476D-8ECD-EA33E9B13EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A211FE7-BD3D-476D-8ECD-EA33E9B13EC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

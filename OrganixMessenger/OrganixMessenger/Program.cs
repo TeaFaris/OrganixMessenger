@@ -1,6 +1,8 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 using OrganixMessenger.Base;
 using OrganixMessenger.Controllers.Util;
 using OrganixMessenger.ServerConfigurations;
@@ -93,10 +95,40 @@ builder.Services
            options.AssumeDefaultVersionWhenUnspecified = true;
            options.DefaultApiVersion = new ApiVersion(1, 0);
            options.ReportApiVersions = true;
-           options.ApiVersionReader = ApiVersionReader.Combine(
-                   new HeaderApiVersionReader("X-Version")
-               );
+       })
+       .AddApiExplorer(options =>
+       {
+           options.SubstituteApiVersionInUrl = true;
        });
+
+// API Documentation
+builder.Services
+    .AddOpenApiDocument(options =>
+    {
+        options.DocumentName = "v1.0";
+
+        options.PostProcess = document =>
+        {
+            document.Info = new OpenApiInfo
+            {
+                Version = "v1.0",
+                Title = "Organix Messenger API",
+                Description = "API documentation for client-side calls or bot creation."
+            };
+        };
+
+        options.OperationProcessors.Add(new OperationSecurityScopeProcessor("Auth Token"));
+
+        options.AddSecurity("Auth Token", new OpenApiSecurityScheme
+        {
+            Type = OpenApiSecuritySchemeType.ApiKey,
+            Name = "Authorization",
+            Description = "Add 'Bearer ' + valid JWT token for client-authorization or add 'Bot ' + valid Bot API token for bot-authorization.",
+            In = OpenApiSecurityApiKeyLocation.Header
+        });
+
+        options.ApiGroupNames = [ "1.0" ];
+    });
 
 var app = builder.Build();
 
@@ -132,5 +164,26 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(OrganixMessenger.Client._Imports).Assembly);
+
+// API Documentation
+app.UseOpenApi(options =>
+{
+    options.Path = "/api/documentation/{documentName}/documentation.json";
+});
+
+app.UseSwaggerUi(options =>
+{
+    options.DocumentPath = "/api/documentation/{documentName}/documentation.json";
+
+    options.DocumentTitle = "Swagger API Documentation";
+    options.Path = "/api/documentation/swagger";
+});
+
+app.UseReDoc(options =>
+{
+    options.DocumentPath = "/api/documentation/{documentName}/documentation.json";
+    options.Path = "/api/documentation/redoc";
+});
+
 
 app.Run();

@@ -9,6 +9,10 @@
                 ILogger<AuthorizeController> logger
             ) : ControllerBase
     {
+        [SwaggerResponse(HttpStatusCode.OK, null, Description = "Successfully registered")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(MessageResponse), Description = "Registration is possible only using the organix email")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(MessageResponse), Description = "Registration errors")]
+        [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult> Register(RegisterRequest registerRequest)
         {
@@ -29,7 +33,7 @@
             if (!result.Successful)
             {
                 logger.LogInformation("Guest with ip {ip} failed to register", Request.HttpContext.Connection.RemoteIpAddress);
-                return BadRequest(result.Errors);
+                return Responses.BadRequest(result.Errors);
             }
 
             logger.LogInformation(
@@ -42,6 +46,10 @@
             return Ok();
         }
 
+        [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResponse), Description = "Successfully logged in")]
+        [SwaggerResponse(HttpStatusCode.Unauthorized, typeof(MessageResponse), Description = "Invalid credentials")]
+        [SwaggerResponse(HttpStatusCode.Unauthorized, typeof(MessageResponse), Description = "You must confirm your email before you log in")]
+        [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
         {
@@ -86,6 +94,10 @@
             };
         }
 
+        [SwaggerResponse(HttpStatusCode.OK, typeof(JWTTokens), Description = "Successfully refreshed tokens")]
+        [SwaggerResponse(HttpStatusCode.Unauthorized, typeof(MessageResponse), Description = "No 'refreshToken' provided in cookies")]
+        [SwaggerResponse(HttpStatusCode.Unauthorized, typeof(MessageResponse), Description = "Invalid refresh token")]
+        [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult<JWTTokens>> RefreshToken()
         {
@@ -118,6 +130,9 @@
             return generatedTokens;
         }
 
+        [SwaggerResponse(HttpStatusCode.OK, null, Description = "Successfully requested password reset")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(MessageResponse), Description = "Password reset request errors")]
+        [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordRequest request)
         {

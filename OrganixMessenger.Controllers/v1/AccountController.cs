@@ -8,6 +8,9 @@
             ILogger<AccountController> logger
         ) : ControllerBase
     {
+        [SwaggerResponse(HttpStatusCode.OK, null, Description = "Successfully confirmed email")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(MessageResponse), Description = "Code is invalid")]
+        [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult> ConfirmEmail(ConfirmEmailRequest requestData)
         {
@@ -33,6 +36,9 @@
             return Ok();
         }
 
+        [SwaggerResponse(HttpStatusCode.OK, null, Description = "Successfully changed password")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(MessageResponse), Description = "Code is invalid")]
+        [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult> ChangePassword(ChangePasswordRequest requestData)
         {

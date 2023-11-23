@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Asn1.Ocsp;
-using OrganixMessenger.Shared.API.Requests;
-
-namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
+﻿namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
 {
     public sealed class UserAuthenticationManager(
                 IUserRepository userRepository,
@@ -62,14 +58,14 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
 
             await userRepository.AddAsync(newUser);
 
-            await userRepository.SaveAsync();
-
             var verifyUrl = $"{httpContextService.GetBaseUrl()}/account/confirm?code={newUser.VereficationToken}";
 
-            await emailSender.SendEmailAsync(
-                        newUser.Email,
-                        $"Велкоме ту Организация.орг, {newUser.Username}.",
-                        $$"""
+            try
+            {
+                await emailSender.SendEmailAsync(
+                    newUser.Email,
+                    $"Велкоме ту Организация.орг, {newUser.Username}.",
+                    $$"""
                         <html>
                         <head>
                             <style>
@@ -104,7 +100,18 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
                         </body>
                         </html>
                         """
-                    );
+                );
+            }
+            catch (Exception ex) when (ex is SmtpCommandException or ParseException)
+            {
+                return new RegisterUserResult
+                {
+                    Successful = false,
+                    Errors = [ "Email doesn't exist." ]
+                };
+            }
+
+            await userRepository.SaveAsync();
 
             return new RegisterUserResult
             {
@@ -181,48 +188,60 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
 
             user.PasswordResetToken = CreateRandomToken();
             user.PasswordResetTokenExpires = DateTime.UtcNow.AddMinutes(PasswordResetExpiresMinutes);
-            await userRepository.SaveAsync();
 
             var changePasswordUrl = $"{httpContextService.GetBaseUrl()}/account/change_password?code={user.PasswordResetToken}";
 
-            await emailSender.SendEmailAsync(
-                        user.Email,
-                        $"Забыл пароль? Не проблема, {user.Username}.",
-                        $$"""
-                        <html>
-                        <head>
-                            <style>
-                                body {
-                                    font-family: Arial, sans-serif;
-                                    background-color: #f0f0f0;
-                                }
-                                h1 {
-                                    color: #333333;
-                                    text-align: center;
-                                }
-                                p {
-                                    color: #555555;
-                                    margin: 10px;
-                                }
-                                a {
-                                    color: #0066cc;
-                                    text-decoration: none;
-                                }
-                                a:hover {
-                                    text-decoration: underline;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <h1>Давно не виделись, чел!</h1>
-                            <p>Перейди по ссылке чтобы поменять его: <a href="{{changePasswordUrl}}">Кликай сюды</a></p>
-                            <p>P.S. Больше не забывай его, а то я сижу тут в подвале и работаю, тут сыро, и мокро и из еды только кошачий корм...
-                            О нет, Фарис идёт... Забудь о том что ты только что прочитал.</p>
-                        </body>
-                        </html>
-                        
-                        """
-                    );
+            try
+            {
+                await emailSender.SendEmailAsync(
+                            user.Email,
+                            $"Забыл пароль? Не проблема, {user.Username}.",
+                            $$"""
+                            <html>
+                            <head>
+                                <style>
+                                    body {
+                                        font-family: Arial, sans-serif;
+                                        background-color: #f0f0f0;
+                                    }
+                                    h1 {
+                                        color: #333333;
+                                        text-align: center;
+                                    }
+                                    p {
+                                        color: #555555;
+                                        margin: 10px;
+                                    }
+                                    a {
+                                        color: #0066cc;
+                                        text-decoration: none;
+                                    }
+                                    a:hover {
+                                        text-decoration: underline;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                <h1>Давно не виделись, чел!</h1>
+                                <p>Перейди по ссылке чтобы поменять его: <a href="{{changePasswordUrl}}">Кликай сюды</a></p>
+                                <p>P.S. Больше не забывай его, а то я сижу тут в подвале и работаю, тут сыро, и мокро и из еды только кошачий корм...
+                                О нет, Фарис идёт... Забудь о том что ты только что прочитал.</p>
+                            </body>
+                            </html>
+                            
+                            """
+                        );
+            }
+            catch(Exception ex) when(ex is SmtpCommandException or ParseException)
+            {
+                return new ForgotPasswordResult
+                {
+                    Successful = false,
+                    ErrorMessage = "Email doesn't exist."
+                };
+            }
+
+            await userRepository.SaveAsync();
 
             return new ForgotPasswordResult
             {
