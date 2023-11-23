@@ -1,8 +1,8 @@
 ﻿namespace OrganixMessenger.Shared.API.Responses
 {
-    public class MessageResponse(string message)
+    public class MessageResponse(object message)
     {
         [Required]
-        public string Message { get; set; } = message;
+        public object Message { get; set; } = message;
     }
 }

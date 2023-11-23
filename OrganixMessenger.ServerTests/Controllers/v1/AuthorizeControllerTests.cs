@@ -89,8 +89,9 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
-            var badRequestResult = result as BadRequestObjectResult;
-            Assert.Equal(registerResult.Errors, badRequestResult.Value);
+            var badRequestResult = (BadRequestObjectResult) result;
+            var msgResponse = badRequestResult.Value as MessageResponse;
+            Assert.Equal(registerResult.Errors, msgResponse.Message);
             authenticationManagerMock.Verify(m => m.RegisterAsync(registerRequest.Username, registerRequest.EmailAddress, registerRequest.Password, Role.User), Times.Once);
         }
 
