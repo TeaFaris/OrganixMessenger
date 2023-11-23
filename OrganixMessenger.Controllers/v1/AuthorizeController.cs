@@ -9,6 +9,7 @@
                 ILogger<AuthorizeController> logger
             ) : ControllerBase
     {
+        [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult> Register(RegisterRequest registerRequest)
         {
@@ -42,6 +43,7 @@
             return Ok();
         }
 
+        [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
         {
@@ -86,6 +88,7 @@
             };
         }
 
+        [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult<JWTTokens>> RefreshToken()
         {
@@ -118,6 +121,7 @@
             return generatedTokens;
         }
 
+        [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordRequest request)
         {

@@ -1,13 +1,8 @@
 ﻿namespace OrganixMessenger.ServerServices.HttpContextServices
 {
-    public class HttpContextService : IHttpContextService
+    public class HttpContextService(IHttpContextAccessor httpContextAccessor) : IHttpContextService
     {
-        readonly IHttpContextAccessor httpContextAccessor;
-
-        public HttpContextService(IHttpContextAccessor httpContextAccessor)
-        {
-            this.httpContextAccessor = httpContextAccessor;
-        }
+        readonly IHttpContextAccessor httpContextAccessor = httpContextAccessor;
 
         public string GetBaseUrl()
         {

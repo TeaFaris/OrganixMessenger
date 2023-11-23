@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OrganixMessenger.Documentation\OrganixMessenger.Documentation.csproj" />
     <ProjectReference Include="..\OrganixMessenger.ServerServices\OrganixMessenger.ServerServices.csproj" />
     <ProjectReference Include="..\OrganixMessenger.Shared\OrganixMessenger.Shared.csproj" />
   </ItemGroup>

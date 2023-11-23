@@ -9,5 +9,6 @@ global using OrganixMessenger.Shared;
 global using OrganixMessenger.Shared.API.Requests;
 global using OrganixMessenger.Shared.API.Responses;
 global using System.Text.Json;
+global using OrganixMessenger.Documentation.ReDoc;
 
 return 0;

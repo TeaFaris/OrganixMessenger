@@ -8,6 +8,7 @@
             ILogger<AccountController> logger
         ) : ControllerBase
     {
+        [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult> ConfirmEmail(ConfirmEmailRequest requestData)
         {
@@ -33,6 +34,7 @@
             return Ok();
         }
 
+        [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult> ChangePassword(ChangePasswordRequest requestData)
         {
