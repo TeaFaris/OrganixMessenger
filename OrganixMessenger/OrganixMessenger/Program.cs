@@ -12,6 +12,7 @@ using OrganixMessenger.ServerServices.HttpContextServices;
 using OrganixMessenger.ServerServices.JWTTokenGeneratorService;
 using OrganixMessenger.ServerServices.Repositories.RefreshTokenRepositories;
 using OrganixMessenger.ServerServices.Repositories.UserRepositories;
+using OrganixMessenger.ServerServices.UIAuthorizationFilters;
 using OrganixMessenger.ServerServices.UserAuthenticationManagerService;
 using Serilog;
 using Serilog.Ui.PostgreSqlProvider;
@@ -196,6 +197,12 @@ app.UseSerilogUi(options =>
 {
     options.HomeUrl = "";
     options.RoutePrefix = "admin/logs";
+
+    options.Authorization = new AuthorizationOptions()
+    {
+        Filters = [ new JWTUIAuthorizationFilter() ],
+        AuthenticationType = AuthenticationType.Jwt
+    };
 });
 
 // API Documentation
