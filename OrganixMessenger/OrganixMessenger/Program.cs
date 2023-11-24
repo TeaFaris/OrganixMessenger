@@ -13,6 +13,9 @@ using OrganixMessenger.ServerServices.JWTTokenGeneratorService;
 using OrganixMessenger.ServerServices.Repositories.RefreshTokenRepositories;
 using OrganixMessenger.ServerServices.Repositories.UserRepositories;
 using OrganixMessenger.ServerServices.UserAuthenticationManagerService;
+using Serilog;
+using Serilog.Ui.PostgreSqlProvider;
+using Serilog.Ui.Web;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +37,27 @@ builder.Services.AddControllers()
     .AddApplicationPart(typeof(Responses).Assembly);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
+
+// Logging
+var connectionString = config.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+builder.Host.UseSerilog((context, options) =>
+{
+    options.WriteTo.PostgreSQL(connectionString, "logs", needAutoCreateTable: true)
+        .MinimumLevel.Information();
+
+    if (context.HostingEnvironment.IsDevelopment())
+    {
+        options.WriteTo.Console()
+            .MinimumLevel.Information();
+    }
+});
+
+builder.Services.AddSerilogUi(options =>
+{
+    options.UseNpgSql(connectionString, "logs");
+});
 
 // JWT Authentication
 var key = Encoding.UTF8.GetBytes(config["JWTSettings:Key"]!);
@@ -164,6 +188,15 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(OrganixMessenger.Client._Imports).Assembly);
+
+// Logging
+app.UseSerilogRequestLogging();
+
+app.UseSerilogUi(options =>
+{
+    options.HomeUrl = "";
+    options.RoutePrefix = "admin/logs";
+});
 
 // API Documentation
 app.UseOpenApi(options =>
