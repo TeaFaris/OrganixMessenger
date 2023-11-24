@@ -21,3 +21,6 @@ global using System.Text;
 global using MimeKit;
 global using MailKit.Net.Smtp;
 global using Serilog.Ui.Web.Authorization;
+global using OrganixMessenger.ServerModels.FileModel;
+global using Microsoft.Extensions.Logging;
+global using System.Net;
