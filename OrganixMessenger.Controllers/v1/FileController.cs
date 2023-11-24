@@ -3,11 +3,19 @@ using OrganixMessenger.ServerServices.Repositories.FileRepositories;
 
 namespace OrganixMessenger.Controllers.v1
 {
+    /// <summary>
+    /// Endpoint for retrieving files.
+    /// </summary>
+    [OpenApiTag("Files Endpoint", Description = "Endpoint for retrieving files.")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
     public sealed class FileController(IFileHost fileHost, IFileRepository fileRepository, ILogger<FileController> logger) : ControllerBase
     {
+        /// <summary>
+        /// Downloads a file from the server.
+        /// </summary>
+        /// <param name="id">The unique identifier of the file.</param>
         [SwaggerResponse(HttpStatusCode.OK, typeof(FileStreamResult), Description = "The file as a FileStream")]
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(MessageResponse), Description = "File not found")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "One or more validation errors occurred")]

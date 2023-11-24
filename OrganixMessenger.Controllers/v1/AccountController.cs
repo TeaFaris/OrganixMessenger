@@ -1,5 +1,9 @@
 ﻿namespace OrganixMessenger.Controllers.v1
 {
+    /// <summary>
+    /// Endpoint for user account related operations.
+    /// </summary>
+    [OpenApiTag("Account Endpoint", Description = "Endpoint for user account related operations.")]
     [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
     [ApiVersion("1.0")]
@@ -8,6 +12,11 @@
             ILogger<AccountController> logger
         ) : ControllerBase
     {
+
+        /// <summary>
+        /// Confirms the email address of a user.
+        /// </summary>
+        /// <param name="requestData">The ConfirmEmailRequest object containing the confirm code.</param>
         [SwaggerResponse(HttpStatusCode.OK, null, Description = "Successfully confirmed email")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(MessageResponse), Description = "Code is invalid")]
         [ReDocCodeSamples]
@@ -36,6 +45,10 @@
             return Ok();
         }
 
+        /// <summary>
+        /// Changes password of the user.
+        /// </summary>
+        /// <param name="requestData">The code and password to reset password.</param>
         [SwaggerResponse(HttpStatusCode.OK, null, Description = "Successfully changed password")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(MessageResponse), Description = "Code is invalid")]
         [ReDocCodeSamples]
