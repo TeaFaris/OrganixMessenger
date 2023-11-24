@@ -8,8 +8,10 @@ using OrganixMessenger.Controllers.Util;
 using OrganixMessenger.ServerConfigurations;
 using OrganixMessenger.ServerData;
 using OrganixMessenger.ServerServices.EmailServices;
+using OrganixMessenger.ServerServices.FileHostServices;
 using OrganixMessenger.ServerServices.HttpContextServices;
 using OrganixMessenger.ServerServices.JWTTokenGeneratorService;
+using OrganixMessenger.ServerServices.Repositories.FileRepositories;
 using OrganixMessenger.ServerServices.Repositories.RefreshTokenRepositories;
 using OrganixMessenger.ServerServices.Repositories.UserRepositories;
 using OrganixMessenger.ServerServices.UIAuthorizationFilters;
@@ -106,12 +108,18 @@ builder.Services
 builder.Services
     .AddScoped<IUserAuthenticationManager, UserAuthenticationManager>();
 
+builder.Services
+    .AddScoped<IFileRepository, FileRepository>();
+
 //// Other
 builder.Services
     .AddSingleton<IEmailSender, SmtpEmailSender>();
 
 builder.Services
     .AddSingleton<IHttpContextService, HttpContextService>();
+
+builder.Services
+    .AddScoped<IFileHost, FileHost>();
 
 // API Versioning
 builder.Services
