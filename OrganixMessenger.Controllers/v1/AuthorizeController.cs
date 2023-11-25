@@ -1,4 +1,7 @@
-﻿namespace OrganixMessenger.Controllers.v1
+﻿using OrganixMessenger.ServerServices.JWTTokenGeneratorServices;
+using OrganixMessenger.ServerServices.UserAuthenticationManagerServices;
+
+namespace OrganixMessenger.Controllers.v1
 {
 	/// <summary>
 	/// Endpoint for user authorization.
@@ -8,8 +11,8 @@
 	[ApiController]
 	[ApiVersion("1.0")]
 	public sealed class AuthorizeController(
-				IUserAuthenticationManager authenticationManager,
-				IJWTTokenGenerator jwtTokenGenerator,
+                IUserAuthenticationManager authenticationManager,
+                IJWTTokenGenerator jwtTokenGenerator,
 				ILogger<AuthorizeController> logger
 			) : ControllerBase
 	{

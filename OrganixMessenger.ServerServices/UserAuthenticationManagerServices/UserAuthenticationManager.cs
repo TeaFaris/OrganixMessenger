@@ -1,4 +1,4 @@
-﻿namespace OrganixMessenger.ServerServices.UserAuthenticationManagerService
+﻿namespace OrganixMessenger.ServerServices.UserAuthenticationManagerServices
 {
     public sealed class UserAuthenticationManager(
                 IUserRepository userRepository,
