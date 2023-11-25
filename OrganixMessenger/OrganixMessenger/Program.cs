@@ -1,9 +1,5 @@
 using Asp.Versioning;
-using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
@@ -192,9 +188,6 @@ var app = builder.Build();
 
 app.UseApplicationDBContext();
 
-// Rate Limiter
-app.UseRateLimiter();
-
 // Health Check
 app.UseConfiguredHealthChecks();
 
@@ -216,6 +209,8 @@ app.UseStaticFiles();
 
 // ASP.NET Pipelines
 app.UseRouting();
+
+app.UseRateLimiter();
 
 app.UseAntiforgery();
 
