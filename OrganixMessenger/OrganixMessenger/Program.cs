@@ -66,10 +66,6 @@ builder.Services.AddRateLimiter(options =>
             ));
 });
 
-// Logging
-var connectionString = config.GetConnectionString("DefaultConnection")
-                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
 // Health Check
 builder.Services.AddConfiguredHealthChecks();
 
