@@ -1,8 +1,4 @@
-﻿using MailKit.Net.Smtp;
-using MimeKit;
-using MimeKit.Text;
-
-namespace OrganixMessenger.ServerServices.EmailServices
+﻿namespace OrganixMessenger.ServerServices.EmailServices
 {
     public sealed class SmtpEmailSender(IOptions<EmailServiceSettings> emailConfiguration) : IEmailSender
     {

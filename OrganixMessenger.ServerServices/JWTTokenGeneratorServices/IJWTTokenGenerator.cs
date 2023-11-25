@@ -1,5 +1,4 @@
-﻿
-namespace OrganixMessenger.ServerServices.JWTTokenGeneratorServices
+﻿namespace OrganixMessenger.ServerServices.JWTTokenGeneratorServices
 {
     public interface IJWTTokenGenerator
     {

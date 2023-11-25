@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.RateLimiting;
-using OrganixMessenger.ServerServices.FileHostServices;
-using OrganixMessenger.ServerServices.Repositories.FileRepositories;
-
-namespace OrganixMessenger.Controllers.v1
+﻿namespace OrganixMessenger.Controllers.v1
 {
     /// <summary>
     /// Endpoint for retrieving files.

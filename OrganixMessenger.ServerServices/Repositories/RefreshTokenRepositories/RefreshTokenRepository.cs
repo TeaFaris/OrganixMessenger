@@ -1,6 +1,4 @@
-﻿using OrganixMessenger.ServerData;
-
-namespace OrganixMessenger.ServerServices.Repositories.RefreshTokenRepositories
+﻿namespace OrganixMessenger.ServerServices.Repositories.RefreshTokenRepositories
 {
     public sealed class RefreshTokenRepository(ApplicationDBContext applicationDbContext) : IRefreshTokenRepository
     {

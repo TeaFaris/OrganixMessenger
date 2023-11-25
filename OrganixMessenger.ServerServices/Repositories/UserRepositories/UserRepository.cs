@@ -1,6 +1,4 @@
-﻿using OrganixMessenger.ServerData;
-
-namespace OrganixMessenger.ServerServices.Repositories.UserRepositories
+﻿namespace OrganixMessenger.ServerServices.Repositories.UserRepositories
 {
     public sealed class UserRepository(ApplicationDBContext applicationDbContext) : IUserRepository
     {

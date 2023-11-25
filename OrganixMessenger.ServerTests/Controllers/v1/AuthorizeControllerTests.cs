@@ -1,15 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using OrganixMessenger.Controllers.v1;
-using OrganixMessenger.ServerServices.JWTTokenGeneratorServices;
-using OrganixMessenger.ServerServices.UserAuthenticationManagerServices;
-using OrganixMessenger.ServerTests.Mocks;
-using OrganixMessenger.Shared.API.Requests;
-using OrganixMessenger.Shared.API.Responses;
-using System.Net;
-
-namespace OrganixMessenger.ServerTests.Controllers.v1
+﻿namespace OrganixMessenger.ServerTests.Controllers.v1
 {
     public class AuthorizeControllerTests
     {

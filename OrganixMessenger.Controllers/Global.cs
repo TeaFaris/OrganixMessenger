@@ -12,5 +12,10 @@ global using NSwag.Annotations;
 global using System.Net;
 global using System.Text.Json.Serialization;
 global using System.Text.Encodings.Web;
+global using Microsoft.AspNetCore.RateLimiting;
+global using OrganixMessenger.ServerServices.JWTTokenGeneratorServices;
+global using OrganixMessenger.ServerServices.UserAuthenticationManagerServices;
+global using OrganixMessenger.ServerServices.FileHostServices;
+global using OrganixMessenger.ServerServices.Repositories.FileRepositories;
 
 return 0;

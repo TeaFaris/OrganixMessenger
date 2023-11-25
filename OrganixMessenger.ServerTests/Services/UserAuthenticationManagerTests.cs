@@ -1,5 +1,3 @@
-using OrganixMessenger.ServerServices.UserAuthenticationManagerServices;
-
 namespace OrganixMessenger.ServerTests.Services
 {
     public class UserAuthenticationManagerTests

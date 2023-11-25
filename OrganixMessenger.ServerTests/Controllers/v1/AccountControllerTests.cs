@@ -1,12 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using OrganixMessenger.Controllers.v1;
-using OrganixMessenger.ServerServices.UserAuthenticationManagerServices;
-using OrganixMessenger.Shared.API.Requests;
-using System.Net;
-
-namespace OrganixMessenger.ServerTests.Controllers.v1
+﻿namespace OrganixMessenger.ServerTests.Controllers.v1
 {
     public class AccountControllerTests
     {
