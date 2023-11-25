@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OrganixMessenger.Controllers.v1;
+using OrganixMessenger.ServerServices.UserAuthenticationManagerServices;
 using OrganixMessenger.Shared.API.Requests;
 using System.Net;
 

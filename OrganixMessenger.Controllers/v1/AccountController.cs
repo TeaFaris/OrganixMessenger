@@ -1,4 +1,6 @@
-﻿namespace OrganixMessenger.Controllers.v1
+﻿using OrganixMessenger.ServerServices.UserAuthenticationManagerServices;
+
+namespace OrganixMessenger.Controllers.v1
 {
     /// <summary>
     /// Endpoint for user account related operations.

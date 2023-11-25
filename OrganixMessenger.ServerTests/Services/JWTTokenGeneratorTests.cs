@@ -1,4 +1,6 @@
-﻿namespace OrganixMessenger.ServerTests.Services
+﻿using OrganixMessenger.ServerServices.JWTTokenGeneratorServices;
+
+namespace OrganixMessenger.ServerTests.Services
 {
     public class JWTTokenGeneratorTests
     {

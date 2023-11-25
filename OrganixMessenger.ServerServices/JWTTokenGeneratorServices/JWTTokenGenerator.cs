@@ -1,4 +1,4 @@
-﻿namespace OrganixMessenger.ServerServices.JWTTokenGeneratorService
+﻿namespace OrganixMessenger.ServerServices.JWTTokenGeneratorServices
 {
     public sealed class JWTTokenGenerator(
                 IOptions<JWTSettings> jwtSettings,
