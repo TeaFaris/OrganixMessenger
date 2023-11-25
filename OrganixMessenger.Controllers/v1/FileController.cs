@@ -1,4 +1,5 @@
-﻿using OrganixMessenger.ServerServices.FileHostServices;
+﻿using Microsoft.AspNetCore.RateLimiting;
+using OrganixMessenger.ServerServices.FileHostServices;
 using OrganixMessenger.ServerServices.Repositories.FileRepositories;
 
 namespace OrganixMessenger.Controllers.v1
@@ -20,6 +21,7 @@ namespace OrganixMessenger.Controllers.v1
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(MessageResponse), Description = "File not found")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "One or more validation errors occurred")]
         [ReDocCodeSamples]
+        [EnableRateLimiting("IP")]
         [HttpGet("{id}")]
         public async Task<ActionResult> Download(Guid id)
         {
