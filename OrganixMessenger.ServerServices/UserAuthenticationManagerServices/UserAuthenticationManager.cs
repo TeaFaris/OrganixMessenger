@@ -41,6 +41,7 @@
                 Email = email,
                 VereficationToken = CreateRandomToken(),
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
+                LastOnline = DateTime.UtcNow,
                 Role = role
             };
 
