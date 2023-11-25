@@ -1,6 +1,9 @@
 using Asp.Versioning;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
@@ -10,13 +13,14 @@ using OrganixMessenger.ServerConfigurations;
 using OrganixMessenger.ServerData;
 using OrganixMessenger.ServerServices.EmailServices;
 using OrganixMessenger.ServerServices.FileHostServices;
+using OrganixMessenger.ServerServices.HealthCheckServices;
 using OrganixMessenger.ServerServices.HttpContextServices;
-using OrganixMessenger.ServerServices.JWTTokenGeneratorService;
+using OrganixMessenger.ServerServices.JWTTokenGeneratorServices;
 using OrganixMessenger.ServerServices.Repositories.FileRepositories;
 using OrganixMessenger.ServerServices.Repositories.RefreshTokenRepositories;
 using OrganixMessenger.ServerServices.Repositories.UserRepositories;
 using OrganixMessenger.ServerServices.UIAuthorizationFilters;
-using OrganixMessenger.ServerServices.UserAuthenticationManagerService;
+using OrganixMessenger.ServerServices.UserAuthenticationManagerServices;
 using Serilog;
 using Serilog.Ui.PostgreSqlProvider;
 using Serilog.Ui.Web;
@@ -25,6 +29,9 @@ using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
+
+var connectionString = config.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 // Configs
 builder.Services
@@ -63,6 +70,10 @@ builder.Services.AddRateLimiter(options =>
 var connectionString = config.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
+// Health Check
+builder.Services.AddConfiguredHealthChecks();
+
+// Logging
 builder.Host.UseSerilog((context, options) =>
 {
     options.WriteTo.PostgreSQL(connectionString, "logs", needAutoCreateTable: true)
@@ -178,7 +189,7 @@ builder.Services
             In = OpenApiSecurityApiKeyLocation.Header
         });
 
-        options.ApiGroupNames = [ "1.0" ];
+        options.ApiGroupNames = ["1.0"];
     });
 
 var app = builder.Build();
@@ -187,6 +198,9 @@ app.UseApplicationDBContext();
 
 // Rate Limiter
 app.UseRateLimiter();
+
+// Health Check
+app.UseConfiguredHealthChecks();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -229,7 +243,7 @@ app.UseSerilogUi(options =>
 
     options.Authorization = new AuthorizationOptions()
     {
-        Filters = [ new JWTUIAuthorizationFilter() ],
+        Filters = [new JWTUIAuthorizationFilter()],
         AuthenticationType = AuthenticationType.Jwt
     };
 });
