@@ -1,4 +1,6 @@
-﻿namespace OrganixMessenger.Controllers.v1
+﻿using Microsoft.AspNetCore.RateLimiting;
+
+namespace OrganixMessenger.Controllers.v1
 {
     /// <summary>
     /// Endpoint for user account related operations.
@@ -6,6 +8,7 @@
     [OpenApiTag("Account Endpoint", Description = "Endpoint for user account related operations.")]
     [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
+    [EnableRateLimiting("IP")]
     [ApiVersion("1.0")]
     public class AccountController(
             IUserAuthenticationManager authenticationManager,
@@ -19,6 +22,7 @@
         /// <param name="requestData">The ConfirmEmailRequest object containing the confirm code.</param>
         [SwaggerResponse(HttpStatusCode.OK, null, Description = "Successfully confirmed email")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(MessageResponse), Description = "Code is invalid")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "One or more validation errors occurred")]
         [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult> ConfirmEmail(ConfirmEmailRequest requestData)
@@ -51,6 +55,7 @@
         /// <param name="requestData">The code and password to reset password.</param>
         [SwaggerResponse(HttpStatusCode.OK, null, Description = "Successfully changed password")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(MessageResponse), Description = "Code is invalid")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "One or more validation errors occurred")]
         [ReDocCodeSamples]
         [HttpPost]
         public async Task<ActionResult> ChangePassword(ChangePasswordRequest requestData)

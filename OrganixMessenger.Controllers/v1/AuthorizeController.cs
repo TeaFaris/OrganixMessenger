@@ -1,4 +1,6 @@
-﻿namespace OrganixMessenger.Controllers.v1
+﻿using Microsoft.AspNetCore.RateLimiting;
+
+namespace OrganixMessenger.Controllers.v1
 {
 	/// <summary>
 	/// Endpoint for user authorization.
@@ -6,6 +8,7 @@
 	[OpenApiTag("Authorize Endpoint", Description = "Endpoint for user authorization.")]
 	[Route("api/v{version:apiVersion}/[controller]/[action]")]
 	[ApiController]
+	[EnableRateLimiting("IP")]
 	[ApiVersion("1.0")]
 	public sealed class AuthorizeController(
 				IUserAuthenticationManager authenticationManager,
@@ -20,6 +23,7 @@
 		[SwaggerResponse(HttpStatusCode.OK, null, Description = "Successfully registered")]
 		[SwaggerResponse(HttpStatusCode.BadRequest, typeof(MessageResponse), Description = "Registration is possible only using the organix email")]
 		[SwaggerResponse(HttpStatusCode.BadRequest, typeof(MessageResponse), Description = "Registration errors")]
+		[SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "One or more validation errors occurred")]
 		[ReDocCodeSamples]
 		[HttpPost]
 		public async Task<ActionResult> Register(RegisterRequest registerRequest)
@@ -61,6 +65,7 @@
 		[SwaggerResponse(HttpStatusCode.OK, typeof(LoginResponse), Description = "Successfully logged in")]
 		[SwaggerResponse(HttpStatusCode.Unauthorized, typeof(MessageResponse), Description = "Invalid credentials")]
 		[SwaggerResponse(HttpStatusCode.Unauthorized, typeof(MessageResponse), Description = "You must confirm your email before you log in")]
+		[SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "One or more validation errors occurred")]
 		[ReDocCodeSamples]
 		[HttpPost]
 		public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
@@ -151,6 +156,7 @@
 		/// <param name="request">Credentials for resetting password.</param>
 		[SwaggerResponse(HttpStatusCode.OK, null, Description = "Successfully requested password reset")]
 		[SwaggerResponse(HttpStatusCode.BadRequest, typeof(MessageResponse), Description = "Password reset request errors")]
+		[SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "One or more validation errors occurred")]
 		[ReDocCodeSamples]
 		[HttpPost]
 		public async Task<ActionResult> ForgotPassword(ForgotPasswordRequest request)

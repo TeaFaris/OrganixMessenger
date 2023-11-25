@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
@@ -20,6 +21,7 @@ using Serilog;
 using Serilog.Ui.PostgreSqlProvider;
 using Serilog.Ui.Web;
 using System.Text;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -40,6 +42,22 @@ builder.Services.AddControllers()
     .AddApplicationPart(typeof(Responses).Assembly);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
+
+// Rate Limiter
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    options.AddPolicy("IP", context =>
+            RateLimitPartition.GetFixedWindowLimiter(
+                context.Connection.RemoteIpAddress?.ToString(),
+                _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = 10,
+                    Window = TimeSpan.FromSeconds(10)
+                }
+            ));
+});
 
 // Logging
 var connectionString = config.GetConnectionString("DefaultConnection")
@@ -166,6 +184,9 @@ builder.Services
 var app = builder.Build();
 
 app.UseApplicationDBContext();
+
+// Rate Limiter
+app.UseRateLimiter();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
