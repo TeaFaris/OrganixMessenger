@@ -151,22 +151,22 @@
 		/// <summary>
 		/// Request reset password to account email.
 		/// </summary>
-		/// <param name="request">Credentials for resetting password.</param>
+		/// <param name="forgotPasswordRequest">Credentials for resetting password.</param>
 		[SwaggerResponse(HttpStatusCode.OK, null, Description = "Successfully requested password reset")]
 		[SwaggerResponse(HttpStatusCode.BadRequest, typeof(MessageResponse), Description = "Password reset request errors")]
 		[SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "One or more validation errors occurred")]
 		[ReDocCodeSamples]
 		[HttpPost]
-		public async Task<ActionResult> ForgotPassword(ForgotPasswordRequest request)
+		public async Task<ActionResult> ForgotPassword(ForgotPasswordRequest forgotPasswordRequest)
 		{
-			var forgotPasswordResult = await authenticationManager.ForgotPasswordAsync(request.Email);
+			var forgotPasswordResult = await authenticationManager.ForgotPasswordAsync(forgotPasswordRequest.Email);
 
 			if (!forgotPasswordResult.Successful)
 			{
 				logger.LogInformation(
 						"Guest with ip {ip} unsuccessfully requested to reset password for account with email {email}",
 						Request.HttpContext.Connection.RemoteIpAddress,
-						request.Email
+						forgotPasswordRequest.Email
 					);
 
 				return Responses.BadRequest(forgotPasswordResult.ErrorMessage!);
@@ -175,7 +175,7 @@
 			logger.LogInformation(
 						"Guest with ip {ip} requested to reset password for account with email {email}",
 						Request.HttpContext.Connection.RemoteIpAddress,
-						request.Email
+						forgotPasswordRequest.Email
 					);
 
 			return Ok();

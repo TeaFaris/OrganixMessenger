@@ -17,5 +17,8 @@ global using OrganixMessenger.ServerServices.JWTTokenGeneratorServices;
 global using OrganixMessenger.ServerServices.UserAuthenticationManagerServices;
 global using OrganixMessenger.ServerServices.FileHostServices;
 global using OrganixMessenger.ServerServices.Repositories.FileRepositories;
+global using Microsoft.AspNetCore.Authorization;
+global using System.Security.Claims;
+global using OrganixMessenger.ServerServices.Repositories.UserRepositories;
 
 return 0;

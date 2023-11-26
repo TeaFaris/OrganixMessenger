@@ -24,3 +24,5 @@ global using OrganixMessenger.Shared.API.Requests;
 global using System.Net;
 global using OrganixMessenger.Shared.API.Responses;
 global using OrganixMessenger.ServerServices.JWTTokenGeneratorServices;
+global using OrganixMessenger.ServerTests.Mocks;
+
