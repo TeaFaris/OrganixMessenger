@@ -5,6 +5,7 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 using OrganixMessenger.Base;
 using OrganixMessenger.Controllers.Util;
+using OrganixMessenger.Documentation;
 using OrganixMessenger.ServerConfigurations;
 using OrganixMessenger.ServerData;
 using OrganixMessenger.ServerServices.EmailServices;
@@ -172,6 +173,7 @@ builder.Services
         };
 
         options.OperationProcessors.Add(new OperationSecurityScopeProcessor("Auth Token"));
+        options.OperationProcessors.Add(new FileFormProcessor());
 
         options.AddSecurity("Auth Token", new OpenApiSecurityScheme
         {

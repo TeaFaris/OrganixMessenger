@@ -16,6 +16,7 @@
         {
             return await applicationDbContext
                 .Users
+                .Include(x => x.ProfilePicture)
                 .Where(predicate)
                 .ToListAsync();
         }
@@ -24,6 +25,7 @@
         {
             return await applicationDbContext
                 .Users
+                .Include(x => x.ProfilePicture)
                 .ToListAsync();
         }
 
@@ -31,6 +33,7 @@
         {
             return applicationDbContext
                 .Users
+                .Include(x => x.ProfilePicture)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

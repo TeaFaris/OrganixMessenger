@@ -1,4 +1,6 @@
-﻿namespace OrganixMessenger.ServerModels.ApplicationUserModel
+﻿using OrganixMessenger.ServerModels.FileModel;
+
+namespace OrganixMessenger.ServerModels.ApplicationUserModel
 {
     public sealed class ApplicationUser
     {
@@ -26,5 +28,12 @@
 
         [Required]
         public Role Role { get; set; }
+
+        public Guid? ProfilePictureId { get; set; }
+        [ForeignKey(nameof(ProfilePictureId))]
+        public UploadedFile? ProfilePicture { get; set; }
+
+        [Required]
+        public DateTime LastOnline { get; set; }
     }
 }
