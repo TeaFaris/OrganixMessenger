@@ -1,4 +1,6 @@
-﻿namespace OrganixMessenger.ServerServices.JWTTokenGeneratorServices
+﻿using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationUserModel;
+
+namespace OrganixMessenger.ServerServices.JWTTokenGeneratorServices
 {
     public interface IJWTTokenGenerator
     {

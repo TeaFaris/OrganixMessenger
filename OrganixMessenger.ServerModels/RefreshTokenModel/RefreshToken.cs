@@ -1,4 +1,6 @@
-﻿namespace OrganixMessenger.ServerModels.RefreshTokenModel
+﻿using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationUserModel;
+
+namespace OrganixMessenger.ServerModels.RefreshTokenModel
 {
     public sealed class RefreshToken
     {

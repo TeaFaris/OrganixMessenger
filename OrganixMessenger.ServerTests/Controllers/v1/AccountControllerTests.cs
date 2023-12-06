@@ -11,7 +11,7 @@
         {
             authenticationManager = new Mock<IUserAuthenticationManager>();
             var logger = new Mock<ILogger<AccountController>>();
-            controller = new AccountController(authenticationManager.Object, logger.Object);
+            controller = new AccountController(authenticationManager.Object, null!, null!, null!, logger.Object);
 
             controller.ControllerContext = new ControllerContext
             {

@@ -1,4 +1,6 @@
-﻿namespace OrganixMessenger.ServerServices.UserAuthenticationManagerServices
+﻿using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationUserModel;
+
+namespace OrganixMessenger.ServerServices.UserAuthenticationManagerServices
 {
     public interface IUserAuthenticationManager
     {

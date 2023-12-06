@@ -1,15 +1,9 @@
 ﻿using OrganixMessenger.ServerModels.FileModel;
 
-namespace OrganixMessenger.ServerModels.ApplicationUserModel
+namespace OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationUserModel
 {
-    public sealed class ApplicationUser
+    public sealed class ApplicationUser : MessengerEntity
     {
-        [Key]
-        public Guid Id { get; init; }
-
-        [Required]
-        public string Username { get; set; }
-
         [Required]
         [EmailAddress]
         public string Email { get; set; }
@@ -28,12 +22,5 @@ namespace OrganixMessenger.ServerModels.ApplicationUserModel
 
         [Required]
         public Role Role { get; set; }
-
-        public Guid? ProfilePictureId { get; set; }
-        [ForeignKey(nameof(ProfilePictureId))]
-        public UploadedFile? ProfilePicture { get; set; }
-
-        [Required]
-        public DateTime LastOnline { get; set; }
     }
 }

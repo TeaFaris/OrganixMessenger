@@ -20,5 +20,9 @@ global using OrganixMessenger.ServerServices.Repositories.FileRepositories;
 global using Microsoft.AspNetCore.Authorization;
 global using System.Security.Claims;
 global using OrganixMessenger.ServerServices.Repositories.UserRepositories;
+global using OrganixMessenger.ServerModels.MessageModel;
+global using OrganixMessenger.ServerServices.Repositories.MessageRepositories;
+global using OrganixMessenger.Shared.API.DTOs.Message;
+global using OrganixMessenger.ServerModels.FileModel;
 
 return 0;

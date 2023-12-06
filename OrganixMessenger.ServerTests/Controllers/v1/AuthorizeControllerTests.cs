@@ -1,4 +1,6 @@
-﻿namespace OrganixMessenger.ServerTests.Controllers.v1
+﻿using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationUserModel;
+
+namespace OrganixMessenger.ServerTests.Controllers.v1
 {
     public class AuthorizeControllerTests
     {

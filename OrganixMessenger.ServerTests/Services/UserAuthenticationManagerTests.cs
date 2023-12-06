@@ -1,3 +1,5 @@
+using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationUserModel;
+
 namespace OrganixMessenger.ServerTests.Services
 {
     public class UserAuthenticationManagerTests

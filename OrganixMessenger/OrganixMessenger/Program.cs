@@ -14,6 +14,7 @@ using OrganixMessenger.ServerServices.HealthCheckServices;
 using OrganixMessenger.ServerServices.HttpContextServices;
 using OrganixMessenger.ServerServices.JWTTokenGeneratorServices;
 using OrganixMessenger.ServerServices.Repositories.FileRepositories;
+using OrganixMessenger.ServerServices.Repositories.MessageRepositories;
 using OrganixMessenger.ServerServices.Repositories.RefreshTokenRepositories;
 using OrganixMessenger.ServerServices.Repositories.UserRepositories;
 using OrganixMessenger.ServerServices.UIAuthorizationFilters;
@@ -133,6 +134,9 @@ builder.Services
 builder.Services
     .AddScoped<IFileRepository, FileRepository>();
 
+builder.Services
+    .AddScoped<IMessageRepository, MessageRepository>();
+
 //// Other
 builder.Services
     .AddSingleton<IEmailSender, SmtpEmailSender>();
@@ -173,7 +177,6 @@ builder.Services
         };
 
         options.OperationProcessors.Add(new OperationSecurityScopeProcessor("Auth Token"));
-        options.OperationProcessors.Add(new FileFormProcessor());
 
         options.AddSecurity("Auth Token", new OpenApiSecurityScheme
         {

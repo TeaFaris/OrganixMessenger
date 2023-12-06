@@ -1,4 +1,6 @@
-﻿namespace OrganixMessenger.ServerServices.Repositories.UserRepositories
+﻿using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationUserModel;
+
+namespace OrganixMessenger.ServerServices.Repositories.UserRepositories
 {
     public sealed class UserRepository(ApplicationDBContext applicationDbContext) : IUserRepository
     {

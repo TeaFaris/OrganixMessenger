@@ -1,7 +1,6 @@
 global using System.Linq.Expressions;
 global using Xunit;
 global using Moq;
-global using OrganixMessenger.ServerModels.ApplicationUserModel;
 global using OrganixMessenger.ServerServices.EmailServices;
 global using OrganixMessenger.ServerServices.HttpContextServices;
 global using OrganixMessenger.ServerServices.Repositories.UserRepositories;
@@ -25,4 +24,6 @@ global using System.Net;
 global using OrganixMessenger.Shared.API.Responses;
 global using OrganixMessenger.ServerServices.JWTTokenGeneratorServices;
 global using OrganixMessenger.ServerTests.Mocks;
+global using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationUserModel;
+
 

@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace OrganixMessenger.ServerServices.Repositories
+﻿namespace OrganixMessenger.ServerServices.Repositories
 {
     public interface IRepository<TEntity, TID>
         where TEntity : class
