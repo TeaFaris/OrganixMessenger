@@ -7,6 +7,8 @@
             return new MessageDTO
             {
                 Id = message.Id,
+                CustomUsername = message.CustomUsername,
+                CustomProfilePicture = message.CustomProfilePicture?.ToDTO(),
                 Files = message.Files.ConvertAll(x => x.ToDTO()),
                 SendTime = message.SendTime,
                 Sender = message.Sender.ToMessageSenderDTO(),

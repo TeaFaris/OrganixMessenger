@@ -19,6 +19,7 @@
 				.Include(x => x.Sender)
 				.Include(x => x.MessageReply)
 				.Include(x => x.Files)
+				.Include(x => x.CustomProfilePicture)
 				.Where(predicate)
 				.ToListAsync();
 		}
@@ -31,6 +32,7 @@
 				.Include(x => x.Sender)
 				.Include(x => x.MessageReply)
 				.Include(x => x.Files)
+				.Include(x => x.CustomProfilePicture)
 				.ToListAsync();
 		}
 
@@ -41,6 +43,7 @@
 				.Include(x => x.Sender)
 				.Include(x => x.MessageReply)
 				.Include(x => x.Files)
+				.Include(x => x.CustomProfilePicture)
 				.FirstOrDefaultAsync(x => x.Id == id);
 		}
 
@@ -51,6 +54,7 @@
 				.Include(x => x.Sender)
 				.Include(x => x.MessageReply)
 				.Include(x => x.Files)
+				.Include(x => x.CustomProfilePicture)
 				.AsQueryable();
 
 			if (predicate is not null)

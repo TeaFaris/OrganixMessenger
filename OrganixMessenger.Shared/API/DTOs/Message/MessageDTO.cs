@@ -8,6 +8,10 @@ namespace OrganixMessenger.Shared.API.DTOs.Message
         [Required]
         public int Id { get; init; }
 
+        public string? CustomUsername { get; init; }
+
+        public FileDTO? CustomProfilePicture { get; init; }
+
         public string Text { get; init; }
 
         [Required]

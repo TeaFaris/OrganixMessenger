@@ -5,6 +5,12 @@
         [Key]
         public int Id { get; init; }
 
+        public string? CustomUsername { get; init; }
+
+        public Guid? CustomProfilePictureId { get; init; }
+        [ForeignKey(nameof(CustomProfilePictureId))]
+        public UploadedFile? CustomProfilePicture { get; init; }
+
         public string Text { get; set; }
 
         public List<UploadedFile> Files { get; set; }
