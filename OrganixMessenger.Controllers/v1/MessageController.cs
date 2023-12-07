@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace OrganixMessenger.Controllers.v1
+﻿namespace OrganixMessenger.Controllers.v1
 {
     /// <summary>
     /// Endpoint for managing messages for client.
@@ -63,22 +61,22 @@ namespace OrganixMessenger.Controllers.v1
         [HttpPost("send")]
         public async Task<ActionResult<MessageDTO>> Post(UserSendMessageRequest message)
         {
-            if (string.IsNullOrEmpty(message.Text) && message.Files is null or { Count: 0 })
+            if (string.IsNullOrEmpty(message.Text) && message.FileIds is null or { Count: 0 })
             {
                 return ValidationProblem("Text and files can't be empty or null.");
             }
 
             string senderId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-            var files = new List<UploadedFile>(message.Files.Count);
+            var files = new List<UploadedFile>(message.FileIds.Count);
 
-            foreach (var file in message.Files)
+            foreach (var fileId in message.FileIds)
             {
-                var serverFile = await fileRepository.GetAsync(file.Id);
+                var serverFile = await fileRepository.GetAsync(fileId);
 
                 if(serverFile is null)
                 {
-                    return ValidationProblem($"File with id '{file.Id}' doesn't exists.");
+                    return ValidationProblem($"File with id '{fileId}' doesn't exists.");
                 }
 
                 files.Add(serverFile);

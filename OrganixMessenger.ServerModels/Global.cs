@@ -8,3 +8,4 @@ global using OrganixMessenger.ServerModels.FileModel;
 global using OrganixMessenger.Shared.API.DTOs.Message;
 global using OrganixMessenger.ServerModels.MessengerEntityModels;
 global using OrganixMessenger.Shared.API.DTOs.MessageSender;
+global using OrganixMessenger.ServerModels.BotCommandModel;

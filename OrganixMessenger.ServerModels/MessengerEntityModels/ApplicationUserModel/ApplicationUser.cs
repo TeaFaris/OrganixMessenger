@@ -1,6 +1,4 @@
-﻿using OrganixMessenger.ServerModels.FileModel;
-
-namespace OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationUserModel
+﻿namespace OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationUserModel
 {
     public sealed class ApplicationUser : MessengerEntity
     {

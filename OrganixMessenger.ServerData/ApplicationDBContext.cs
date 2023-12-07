@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using OrganixMessenger.ServerModels.BotCommandModel;
 using OrganixMessenger.ServerModels.FileModel;
 using OrganixMessenger.ServerModels.MessageModel;
 using OrganixMessenger.ServerModels.MessengerEntityModels;
+using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationBotModel;
 using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationUserModel;
 using OrganixMessenger.ServerModels.RefreshTokenModel;
 
@@ -12,10 +14,17 @@ namespace OrganixMessenger.ServerData
     public sealed class ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : DbContext(options)
     {
         public DbSet<MessengerEntity> MessengerEntities { get; init; }
+
         public DbSet<ApplicationUser> Users { get; init; }
         public DbSet<RefreshToken> RefreshTokens { get; init; }
+
+        public DbSet<ApplicationBot> Bots { get; init; }
+        public DbSet<BotCommand> Commands { get; init; }
+
         public DbSet<UploadedFile> Files { get; init; }
+
         public DbSet<Message> Messages { get; init; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
