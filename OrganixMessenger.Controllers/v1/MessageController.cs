@@ -58,6 +58,15 @@
             return new(messageDTOs);
         }
 
+        /// <summary>
+        /// Sends a message to the messenger.
+        /// </summary>
+        /// <param name="message">The message to be sent.</param>
+        [SwaggerResponse(HttpStatusCode.OK, typeof(MessageDTO), Description = "The message successfully sent.")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "Text and files can't be empty or null.")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "File with id '{fileId}' doesn't exists.")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "One or more validation errors occurred.")]
+        [SwaggerResponse(HttpStatusCode.Unauthorized, null, Description = "Your request was not authorized to access the requested resource. This could be due to missing or invalid authentication credentials.")]
         [ReDocCodeSamples]
         [HttpPost("send")]
         public async Task<ActionResult<MessageDTO>> Post(UserSendMessageRequest message)
@@ -89,7 +98,7 @@
                 SenderId = Guid.Parse(senderId),
                 SendTime = DateTime.UtcNow,
                 MessageReplyId = message.MessageReplyId,
-                Text = message.Text
+                Text = message.Text ?? ""
             };
 
             await messageRepository.AddAsync(serverMessage);
