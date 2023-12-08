@@ -1,7 +1,7 @@
 ﻿namespace OrganixMessenger.Controllers.v1
 {
     /// <summary>
-    /// Endpoint for managing Messenger Bots.
+    /// Endpoint for managing Organix Bots.
     /// </summary>
     [OpenApiTag("Bots Endpoint", Description = "Endpoint for managing Organix Bots.")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -10,6 +10,7 @@
     [EnableRateLimiting("IP")]
     [ApiVersion("1.0")]
     public sealed class BotsController(
+            ILogger<BotsController> logger,
             IBotRepository botRepository,
             IBotCommandRepository commandRepository,
             IAPITokenGeneratorService apiTokenGenerator,
@@ -61,7 +62,7 @@
         /// Creates a new Organix Bot with the given name and assigns it to the current user.
         /// </summary>
         /// <param name="name">The name of the bot to create.</param>
-        [SwaggerResponse(HttpStatusCode.OK, typeof(BotDTO), Description = "Returns the newly created Messenger Bot")]
+        [SwaggerResponse(HttpStatusCode.OK, typeof(BotDTO), Description = "Returns the newly created Organix Bot")]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "One or more validation errors occurred.")]
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, Description = "Your request was not authorized to access the requested resource. This could be due to missing or invalid authentication credentials.")]
         [ReDocCodeSamples]
@@ -91,6 +92,42 @@
         }
 
         /// <summary>
+        /// Generates a new token and deletes the old one.
+        /// </summary>
+        /// <param name="id">The id of the bot.</param>
+        [SwaggerResponse(HttpStatusCode.OK, typeof(BotDTO), Description = "Returns the newly created Bot Token.")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "One or more validation errors occurred.")]
+        [SwaggerResponse(HttpStatusCode.Unauthorized, null, Description = "Your request was not authorized to access the requested resource. This could be due to missing or invalid authentication credentials.")]
+        [ReDocCodeSamples]
+        [HttpPost("{id}/generatetoken")]
+        public async Task<ActionResult<GenerateTokenResponse>> GenerateToken(Guid id)
+        {
+            var bot = await botRepository.GetAsync(id);
+
+            if (bot is null or { Removed: true })
+            {
+                return Responses.NotFound("Bot was not found.");
+            }
+
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+            if (bot.OwnerId != Guid.Parse(userId))
+            {
+                return Responses.Forbidden("You do not have permission to edit this bot.");
+            }
+
+            bot.Token = apiTokenGenerator.GenerateAPIToken();
+
+            await botRepository.UpdateAsync(bot);
+            await botRepository.SaveAsync();
+
+            return new GenerateTokenResponse
+            {
+                Token = apiTokenGenerator.GenerateAPIToken()
+            };
+        }
+
+        /// <summary>
         /// Changes the profile picture of the specified bot.
         /// </summary>
         /// <param name="id">The id of the bot.</param>
@@ -114,7 +151,7 @@
 
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-            if (bot.OwnerId.ToString() != userId)
+            if (bot.OwnerId != Guid.Parse(userId))
             {
                 return Responses.Forbidden("You do not have permission to edit this bot.");
             }
@@ -168,7 +205,7 @@
 
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-            if (bot.OwnerId.ToString() != userId)
+            if (bot.OwnerId != Guid.Parse(userId))
             {
                 return Responses.Forbidden("You do not have permission to edit this bot.");
             }
@@ -203,7 +240,7 @@
 
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-            if (bot.OwnerId.ToString() != userId)
+            if (bot.OwnerId != Guid.Parse(userId))
             {
                 return Responses.Forbidden("You do not have permission to edit this bot.");
             }
@@ -240,7 +277,7 @@
 
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-            if (bot.OwnerId.ToString() != userId)
+            if (bot.OwnerId != Guid.Parse(userId))
             {
                 return Responses.Forbidden("You do not have permission to edit this bot.");
             }
@@ -287,7 +324,7 @@
 
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-            if (bot.OwnerId.ToString() != userId)
+            if (bot.OwnerId != Guid.Parse(userId))
             {
                 return Responses.Forbidden("You do not have permission to edit this bot.");
             }
@@ -334,7 +371,7 @@
 
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-            if (bot.OwnerId.ToString() != userId)
+            if (bot.OwnerId != Guid.Parse(userId))
             {
                 return Responses.Forbidden("You do not have permission to edit this bot.");
             }

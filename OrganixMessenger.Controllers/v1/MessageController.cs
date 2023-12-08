@@ -10,6 +10,7 @@
     [EnableRateLimiting("IP")]
     [ApiVersion("1.0")]
     public sealed class MessageController(
+            ILogger<MessageController> logger,
             IMessageRepository messageRepository,
             IFileRepository fileRepository
         ) : ControllerBase
@@ -199,11 +200,23 @@
                 }
             }
 
+            var previousMessageJson = JsonSerializer.Serialize(messageToEdit.ToDTO());
+
             messageToEdit.MessageReplyId = editedMessage.MessageReplyId ?? messageToEdit.MessageReplyId;
             messageToEdit.MessageReply = null;
             messageToEdit.Files = newFiles.Count != 0 ? newFiles : messageToEdit.Files;
             messageToEdit.Text = editedMessage.Text ?? messageToEdit.Text;
             messageToEdit.Edited = true;
+
+            logger.LogInformation(
+                    "User {username} with email {email} and id {id} edited message with id {messageId} from: {previousMessageJson} to: {newMessageJson}",
+                    User.FindFirstValue(ClaimTypes.Name)!,
+                    Request.HttpContext.Connection.RemoteIpAddress,
+                    User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                    id,
+                    previousMessageJson,
+                    JsonSerializer.Serialize(messageToEdit.ToDTO())
+                );
 
             await messageRepository.UpdateAsync(messageToEdit);
             await messageRepository.SaveAsync();
@@ -247,6 +260,14 @@
 
             await messageRepository.UpdateAsync(messageToRemove);
             await messageRepository.SaveAsync();
+
+            logger.LogInformation(
+                    "User {username} with ip {ip} and id {id} removed message with id {messageId}",
+                    User.FindFirstValue(ClaimTypes.Name)!,
+                    Request.HttpContext.Connection.RemoteIpAddress,
+                    User.FindFirstValue(ClaimTypes.NameIdentifier)!,
+                    id
+                );
 
             return Ok();
         }

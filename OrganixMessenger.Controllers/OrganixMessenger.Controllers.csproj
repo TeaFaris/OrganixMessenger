@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -15,6 +15,7 @@
     <ProjectReference Include="..\OrganixMessenger.Documentation\OrganixMessenger.Documentation.csproj" />
     <ProjectReference Include="..\OrganixMessenger.ServerServices\OrganixMessenger.ServerServices.csproj" />
     <ProjectReference Include="..\OrganixMessenger.Shared\OrganixMessenger.Shared.csproj" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>
