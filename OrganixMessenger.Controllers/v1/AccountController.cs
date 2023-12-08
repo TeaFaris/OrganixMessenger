@@ -98,6 +98,11 @@
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             var user = (await userRepository.GetAsync(Guid.Parse(userId)))!;
 
+            if(user.ProfilePicture is not null)
+            {
+                await fileRepository.RemoveAsync(user.ProfilePicture);
+            }
+
             var profilePictureFile =
                 await fileHost.UploadAsync(
                         profilePicture.File.OpenReadStream(),

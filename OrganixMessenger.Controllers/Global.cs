@@ -31,3 +31,4 @@ global using OrganixMessenger.Shared.API.DTOs;
 global using OrganixMessenger.ServerModels.BotCommandModel;
 global using System.ComponentModel.DataAnnotations;
 global using OrganixMessenger.ServerServices.BotAuthorizationServices;
+global using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationUserModel;
