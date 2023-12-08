@@ -3,14 +3,14 @@
     /// <summary>
     /// Endpoint for managing Organix Bots.
     /// </summary>
-    [OpenApiTag("Bots Endpoint", Description = "Endpoint for managing Organix Bots.")]
+    [OpenApiTag("Bot Endpoint", Description = "Endpoint for managing Organix Bots.")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize]
     [EnableRateLimiting("IP")]
     [ApiVersion("1.0")]
-    public sealed class BotsController(
-            ILogger<BotsController> logger,
+    public sealed class BotController(
+            ILogger<BotController> logger,
             IBotRepository botRepository,
             IBotCommandRepository commandRepository,
             IAPITokenGeneratorService apiTokenGenerator,
@@ -123,7 +123,7 @@
 
             return new GenerateTokenResponse
             {
-                Token = apiTokenGenerator.GenerateAPIToken()
+                Token = bot.Token
             };
         }
 
@@ -266,7 +266,7 @@
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, Description = "Your request was not authorized to access the requested resource. This could be due to missing or invalid authentication credentials.")]
         [ReDocCodeSamples]
         [HttpPost("{id}/command")]
-        public async Task<ActionResult<BotCommandDTO>> AddCommand(Guid id, BotCommandDTO command)
+        public async Task<ActionResult<BotCommandDTO>> AddCommand(Guid id, AddBotCommandRequest command)
         {
             var bot = await botRepository.GetAsync(id);
 

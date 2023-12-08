@@ -1,16 +1,16 @@
 ﻿namespace OrganixMessenger.Controllers.v1
 {
     /// <summary>
-    /// Endpoint for managing messages for client.
+    /// Endpoint for managing messages for bots.
     /// </summary>
-    [OpenApiTag("Client Messages Endpoint", Description = "Endpoint for managing messages for client.")]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [OpenApiTag("Bot Messages Endpoint", Description = "Endpoint for managing messages for bots.")]
+    [Route("api/v{version:apiVersion}/bot/message")]
     [ApiController]
-    [Authorize]
+    [BotAuthorize]
     [EnableRateLimiting("IP")]
     [ApiVersion("1.0")]
-    public sealed class MessageController(
-            ILogger<MessageController> logger,
+    public sealed class MessageBotController(
+            ILogger<MessageBotController> logger,
             IMessageRepository messageRepository,
             IFileRepository fileRepository
         ) : ControllerBase
@@ -69,7 +69,7 @@
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, Description = "Your request was not authorized to access the requested resource. This could be due to missing or invalid authentication credentials.")]
         [ReDocCodeSamples]
         [HttpPost("send")]
-        public async Task<ActionResult<MessageDTO>> Post(UserSendMessageRequest message)
+        public async Task<ActionResult<MessageDTO>> Post(BotSendMessageRequest message)
         {
             if (string.IsNullOrEmpty(message.Text) && message.FileIds is null or { Count: 0 })
             {
@@ -80,13 +80,13 @@
 
             var files = new List<UploadedFile>(message.FileIds?.Count ?? 0);
 
-            if(message.FileIds is not null)
+            if (message.FileIds is not null)
             {
                 foreach (var fileId in message.FileIds)
                 {
                     var serverFile = await fileRepository.GetAsync(fileId);
 
-                    if(serverFile is null)
+                    if (serverFile is null)
                     {
                         return ValidationProblem($"File with id '{fileId}' doesn't exists.");
                     }
@@ -101,7 +101,9 @@
                 SenderId = Guid.Parse(senderId),
                 SendTime = DateTime.UtcNow,
                 MessageReplyId = message.MessageReplyId,
-                Text = message.Text ?? ""
+                Text = message.Text ?? "",
+                CustomProfilePictureId = message.CustomProfilePictureId,
+                CustomUsername = message.CustomUsername
             };
 
             await messageRepository.AddAsync(serverMessage);
@@ -197,7 +199,7 @@
 
             var newFiles = new List<UploadedFile>(editedMessage.Files?.Count ?? 0);
 
-            if(editedMessage.Files is not null)
+            if (editedMessage.Files is not null)
             {
                 foreach (var file in editedMessage.Files)
                 {
@@ -221,7 +223,7 @@
             messageToEdit.Edited = true;
 
             logger.LogInformation(
-                    "User {username} with ip {ip} and id {id} edited message with id {messageId} from: {previousMessageJson} to: {newMessageJson}",
+                    "Bot {username} with ip {ip} and id {id} edited message with id {messageId} from: {previousMessageJson} to: {newMessageJson}",
                     User.FindFirstValue(ClaimTypes.Name)!,
                     Request.HttpContext.Connection.RemoteIpAddress,
                     User.FindFirstValue(ClaimTypes.NameIdentifier)!,
@@ -274,7 +276,7 @@
             await messageRepository.SaveAsync();
 
             logger.LogInformation(
-                    "User {username} with ip {ip} and id {id} removed message with id {messageId}",
+                    "Bot {username} with ip {ip} and id {id} removed message with id {messageId}",
                     User.FindFirstValue(ClaimTypes.Name)!,
                     Request.HttpContext.Connection.RemoteIpAddress,
                     User.FindFirstValue(ClaimTypes.NameIdentifier)!,

@@ -41,9 +41,10 @@
 
             if (bot is null)
             {
-                context.Result = Responses.Unauthorized("Provided token is invalid.");
+                context.Result = Responses.Unauthorized("Provided token in 'Authorization' header is invalid.");
                 return;
             }
+
             context.HttpContext.User.AddIdentity(new ClaimsIdentity(
                     [
                         new Claim(ClaimTypes.NameIdentifier, bot.Id.ToString()),

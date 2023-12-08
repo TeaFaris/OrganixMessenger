@@ -30,5 +30,4 @@ global using OrganixMessenger.ServerServices.Repositories.BotRepositories;
 global using OrganixMessenger.Shared.API.DTOs;
 global using OrganixMessenger.ServerModels.BotCommandModel;
 global using System.ComponentModel.DataAnnotations;
-
-return 0;
+global using OrganixMessenger.ServerServices.BotAuthorizationServices;

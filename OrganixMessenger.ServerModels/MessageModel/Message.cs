@@ -5,6 +5,7 @@
         [Key]
         public int Id { get; init; }
 
+        [StringLength(32, MinimumLength = 5)]
         public string? CustomUsername { get; init; }
 
         public Guid? CustomProfilePictureId { get; init; }
