@@ -10,5 +10,7 @@
         public ApplicationUser Owner { get; init; }
 
         public List<BotCommand> Commands { get; init; }
+
+        public bool Removed { get; set; }
     }
 }

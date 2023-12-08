@@ -28,7 +28,7 @@
         {
             // Arrange
             var code = "123456";
-            var user = new ApplicationUser { Username = "test", Email = "test@test.com" };
+            var user = new ApplicationUser { Name = "test", Email = "test@test.com" };
             var result = new ConfirmEmailResult { Successful = true, User = user };
             authenticationManager.Setup(m => m.ConfirmEmailAsync(code)).ReturnsAsync(result);
 
@@ -62,7 +62,7 @@
             // Arrange
             var code = "123456";
             var password = "password";
-            var user = new ApplicationUser { Username = "test", Email = "test@test.com" };
+            var user = new ApplicationUser { Name = "test", Email = "test@test.com" };
             var result = new ChangePasswordResult { Successful = true, User = user };
             authenticationManager.Setup(m => m.ChangePasswordAsync(code, password)).ReturnsAsync(result);
 
@@ -80,7 +80,7 @@
             // Arrange
             var code = "123456";
             var password = "password";
-            var user = new ApplicationUser { Username = "test", Email = "test@test.com" };
+            var user = new ApplicationUser { Name = "test", Email = "test@test.com" };
             var result = new ChangePasswordResult { Successful = false, User = user };
             authenticationManager.Setup(m => m.ChangePasswordAsync(code, password)).ReturnsAsync(result);
 

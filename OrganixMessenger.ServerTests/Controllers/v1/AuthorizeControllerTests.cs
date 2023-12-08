@@ -43,7 +43,7 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
                 Successful = true,
                 User = new ApplicationUser
                 {
-                    Username = "testuser",
+                    Name = "testuser",
                     Email = "testuser@test.com",
                     Role = Role.User
                 }
@@ -121,7 +121,7 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
             };
             var user = new ApplicationUser
             {
-                Username = "testuser",
+                Name = "testuser",
                 Email = "testuser@test.com",
                 Role = Role.User,
                 EmailConfirmed = true
@@ -183,7 +183,7 @@ namespace OrganixMessenger.ServerTests.Controllers.v1
             };
             var user = new ApplicationUser
             {
-                Username = "testuser",
+                Name = "testuser",
                 Email = "testuser@test.com",
                 Role = Role.User,
                 EmailConfirmed = false

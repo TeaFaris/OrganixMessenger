@@ -31,4 +31,5 @@ global using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 global using Microsoft.Extensions.Diagnostics.HealthChecks;
 global using MimeKit.Text;
 global using OrganixMessenger.ServerModels.MessageModel;
-global using OrganixMessenger.Shared.API.DTOs.Message;
+global using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationBotModel;
+global using OrganixMessenger.ServerModels.BotCommandModel;

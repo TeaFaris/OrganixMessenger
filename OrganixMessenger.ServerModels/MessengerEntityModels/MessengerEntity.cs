@@ -6,7 +6,7 @@
         public Guid Id { get; init; }
 
         [Required]
-        public string Username { get; set; }
+        public string Name { get; set; }
 
         public Guid? ProfilePictureId { get; set; }
         [ForeignKey(nameof(ProfilePictureId))]

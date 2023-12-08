@@ -1,6 +1,4 @@
-﻿using OrganixMessenger.Shared.API.DTOs.MessageSender;
-
-namespace OrganixMessenger.Shared.API.DTOs.Message
+﻿namespace OrganixMessenger.Shared.API.DTOs
 {
     public sealed class MessageDTO
     {

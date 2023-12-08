@@ -15,7 +15,7 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerServices
         {
             var errors = new List<string>();
 
-            var usersWithSameUsername = await userRepository.FindAsync(x => x.Username == username);
+            var usersWithSameUsername = await userRepository.FindAsync(x => x.Name == username);
             var usersWithSameEmail = await userRepository.FindAsync(x => x.Email == email);
 
             if (usersWithSameUsername.Any())
@@ -39,7 +39,7 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerServices
 
             var newUser = new ApplicationUser
             {
-                Username = username,
+                Name = username,
                 Email = email,
                 VereficationToken = CreateRandomToken(),
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
@@ -67,7 +67,7 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerServices
             {
                 await emailSender.SendEmailAsync(
                     newUser.Email,
-                    $"Велкоме ту Организация.орг, {newUser.Username}.",
+                    $"Велкоме ту Организация.орг, {newUser.Name}.",
                     $$"""
                         <html>
                         <head>
@@ -149,7 +149,7 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerServices
 
         public async Task<ApplicationUser?> ValidateCredentialsAsync(string username, string password)
         {
-            var usersFound = await userRepository.FindAsync(x => x.Username == username);
+            var usersFound = await userRepository.FindAsync(x => x.Name == username);
 
             var user = usersFound.FirstOrDefault();
 
@@ -198,7 +198,7 @@ namespace OrganixMessenger.ServerServices.UserAuthenticationManagerServices
             {
                 await emailSender.SendEmailAsync(
                             user.Email,
-                            $"Забыл пароль? Не проблема, {user.Username}.",
+                            $"Забыл пароль? Не проблема, {user.Name}.",
                             $$"""
                             <html>
                             <head>

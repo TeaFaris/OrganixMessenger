@@ -50,7 +50,7 @@
 					"Guest with ip {ip} registered successfully with email {email} and username {username}",
 					Request.HttpContext.Connection.RemoteIpAddress,
 					result.User.Email,
-					result.User.Username
+					result.User.Name
 				);
 
 			return Ok();

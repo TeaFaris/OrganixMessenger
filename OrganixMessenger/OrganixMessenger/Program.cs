@@ -8,11 +8,14 @@ using OrganixMessenger.Controllers.Util;
 using OrganixMessenger.Documentation;
 using OrganixMessenger.ServerConfigurations;
 using OrganixMessenger.ServerData;
+using OrganixMessenger.ServerServices.APITokenGeneratorServices;
 using OrganixMessenger.ServerServices.EmailServices;
 using OrganixMessenger.ServerServices.FileHostServices;
 using OrganixMessenger.ServerServices.HealthCheckServices;
 using OrganixMessenger.ServerServices.HttpContextServices;
 using OrganixMessenger.ServerServices.JWTTokenGeneratorServices;
+using OrganixMessenger.ServerServices.Repositories.BotCommandsRepositories;
+using OrganixMessenger.ServerServices.Repositories.BotRepositories;
 using OrganixMessenger.ServerServices.Repositories.FileRepositories;
 using OrganixMessenger.ServerServices.Repositories.MessageRepositories;
 using OrganixMessenger.ServerServices.Repositories.RefreshTokenRepositories;
@@ -124,6 +127,18 @@ builder.Services
 builder.Services
     .AddScoped<IUserRepository, UserRepository>();
 
+builder.Services
+    .AddScoped<IMessageRepository, MessageRepository>();
+
+builder.Services
+    .AddScoped<IBotRepository, BotRepository>();
+
+builder.Services
+    .AddScoped<IFileRepository, FileRepository>();
+
+builder.Services
+    .AddScoped<IBotCommandRepository, BotCommandRepository>();
+
 //// Authentication
 builder.Services
     .AddScoped<IJWTTokenGenerator, JWTTokenGenerator>();
@@ -132,10 +147,7 @@ builder.Services
     .AddScoped<IUserAuthenticationManager, UserAuthenticationManager>();
 
 builder.Services
-    .AddScoped<IFileRepository, FileRepository>();
-
-builder.Services
-    .AddScoped<IMessageRepository, MessageRepository>();
+    .AddSingleton<IAPITokenGeneratorService, APITokenGeneratorService>();
 
 //// Other
 builder.Services

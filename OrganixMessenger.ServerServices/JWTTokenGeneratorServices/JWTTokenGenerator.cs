@@ -77,7 +77,7 @@ namespace OrganixMessenger.ServerServices.JWTTokenGeneratorServices
             Claim[] claims = 
             [
                 new Claim(ClaimTypes.NameIdentifier, applicationUser.Id.ToString()),
-                new Claim(ClaimTypes.Name, applicationUser.Username),
+                new Claim(ClaimTypes.Name, applicationUser.Name),
                 new Claim(ClaimTypes.Email, applicationUser.Email),
                 new Claim(ClaimTypes.Role, applicationUser.Role.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())

@@ -28,7 +28,7 @@ namespace OrganixMessenger.ServerTests.Services
             testUser = new ApplicationUser
             {
                 Id = Guid.NewGuid(),
-                Username = "testuser",
+                Name = "testuser",
                 Email = "testuser@example.com",
                 Role = Role.User
             };
@@ -61,7 +61,7 @@ namespace OrganixMessenger.ServerTests.Services
             Assert.NotNull(principal);
             Assert.NotNull(validatedToken);
             Assert.Equal(testUser.Id.ToString(), principal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            Assert.Equal(testUser.Username, principal.FindFirst(ClaimTypes.Name)?.Value);
+            Assert.Equal(testUser.Name, principal.FindFirst(ClaimTypes.Name)?.Value);
             Assert.Equal(testUser.Email, principal.FindFirst(ClaimTypes.Email)?.Value);
             Assert.Equal(testUser.Role.ToString(), principal.FindFirst(ClaimTypes.Role)?.Value);
         }

@@ -2,9 +2,12 @@
 {
     public static class JsonSchemaSampleGenerator
     {
-        public static JToken? ToJsonSample(this JsonSchema schema, Type payloadType, Type? arrayType = null)
+        public static JToken? ToJsonSample(this JsonSchema schema, Type payloadType, Type? arrayType = null, Type? firstType = null)
         {
             JToken? output;
+
+            firstType ??= payloadType;
+
             switch (schema.Type)
             {
                 case JsonObjectType.Object:
@@ -21,6 +24,11 @@
                                                     .GetProperty(prop.Key)!
                                                     .PropertyType;
 
+                                if(propertyType == firstType)
+                                {
+                                    continue;
+                                }
+
                                 var propertySchema = JsonSchema.FromType(propertyType);
 
                                 var ienumerableInterface = propertyType.GetInterfaces().FirstOrDefault(x => x.IsGenericType
@@ -28,9 +36,14 @@
 
                                 var ienumerableType = ienumerableInterface?.GenericTypeArguments[0];
 
+                                if(ienumerableType == firstType)
+                                {
+                                    continue;
+                                }
+
                                 var jsonSample = prop.Value.Type != JsonObjectType.None
-                                                           ? ToJsonSample(prop.Value, propertyType, ienumerableType)
-                                                           : ToJsonSample(propertySchema, propertyType, ienumerableType);
+                                                           ? ToJsonSample(prop.Value, propertyType, ienumerableType, firstType)
+                                                           : ToJsonSample(propertySchema, propertyType, ienumerableType, firstType);
 
                                 jObject.Add(
                                         jsonPropName,
@@ -51,7 +64,7 @@
                         var ienumerableInterface = arrayType!.GetInterfaces().FirstOrDefault(x => x.IsGenericType
                                             && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 
-                        jArray.Add(ToJsonSample(item, arrayType, ienumerableInterface?.GenericTypeArguments[0])!);
+                        jArray.Add(ToJsonSample(item, arrayType, ienumerableInterface?.GenericTypeArguments[0], firstType)!);
 
                         output = jArray;
                     }

@@ -1,4 +1,4 @@
-﻿namespace OrganixMessenger.Shared.API.DTOs.File
+﻿namespace OrganixMessenger.Shared.API.DTOs
 {
     public sealed class FileDTO
     {

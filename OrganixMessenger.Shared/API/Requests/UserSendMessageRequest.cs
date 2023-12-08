@@ -2,9 +2,9 @@
 {
     public sealed class UserSendMessageRequest
     {
-        public string Text { get; init; }
+        public string? Text { get; init; }
 
-        public List<Guid> FileIds { get; init; }
+        public List<Guid>? FileIds { get; init; }
 
         public int? MessageReplyId { get; init; }
     }

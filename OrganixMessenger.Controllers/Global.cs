@@ -22,7 +22,13 @@ global using System.Security.Claims;
 global using OrganixMessenger.ServerServices.Repositories.UserRepositories;
 global using OrganixMessenger.ServerModels.MessageModel;
 global using OrganixMessenger.ServerServices.Repositories.MessageRepositories;
-global using OrganixMessenger.Shared.API.DTOs.Message;
 global using OrganixMessenger.ServerModels.FileModel;
+global using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationBotModel;
+global using OrganixMessenger.ServerServices.APITokenGeneratorServices;
+global using OrganixMessenger.ServerServices.Repositories.BotCommandsRepositories;
+global using OrganixMessenger.ServerServices.Repositories.BotRepositories;
+global using OrganixMessenger.Shared.API.DTOs;
+global using OrganixMessenger.ServerModels.BotCommandModel;
+global using System.ComponentModel.DataAnnotations;
 
 return 0;

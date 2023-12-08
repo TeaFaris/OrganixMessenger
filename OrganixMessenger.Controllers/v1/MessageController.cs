@@ -138,7 +138,7 @@
                         (searchRequest.After == null || searchRequest.After > x.SendTime) &&
                         (searchRequest.Before == null || searchRequest.Before < x.SendTime) &&
                         // TODO: Is sender bot
-                        (searchRequest.SenderUsername == null || x.Sender.Username.ToLower().Contains(searchRequest.SenderUsername.ToLower()))
+                        (searchRequest.SenderUsername == null || x.Sender.Name.ToLower().Contains(searchRequest.SenderUsername.ToLower()))
                     );
 
             var foundMessageDTOs = foundMessages
@@ -150,6 +150,7 @@
         /// <summary>
         /// Edits the message with the specified id.
         /// </summary>
+        /// <param name="id">The id of the message.</param>
         /// <param name="editedMessage">Edited message.</param>
         [SwaggerResponse(HttpStatusCode.OK, typeof(MessageDTO), Description = "The edited message.")]
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(MessageResponse), Description = "Message was not found or was deleted.")]
@@ -159,10 +160,10 @@
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationProblemDetails), Description = "One or more validation errors occurred.")]
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, Description = "Your request was not authorized to access the requested resource. This could be due to missing or invalid authentication credentials.")]
         [ReDocCodeSamples]
-        [HttpPut]
-        public async Task<ActionResult<MessageDTO>> Edit(EditMessageRequest editedMessage)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<MessageDTO>> Edit(int id, [FromBody] EditMessageRequest editedMessage)
         {
-            var messageToEdit = await messageRepository.GetAsync(editedMessage.Id);
+            var messageToEdit = await messageRepository.GetAsync(id);
 
             if (messageToEdit is null or { Removed: true })
             {
@@ -181,24 +182,27 @@
                 return Responses.BadRequest("Text and files can't be empty or null.");
             }
 
-            var newFiles = new List<UploadedFile>(editedMessage.Files.Count);
+            var newFiles = new List<UploadedFile>(editedMessage.Files?.Count ?? 0);
 
-            foreach (var file in editedMessage.Files)
+            if(editedMessage.Files is not null)
             {
-                var serverFile = await fileRepository.GetAsync(file.Id);
-
-                if (serverFile is null)
+                foreach (var file in editedMessage.Files)
                 {
-                    return Responses.BadRequest($"File with id '{file.Id}' doesn't exists.");
-                }
+                    var serverFile = await fileRepository.GetAsync(file.Id);
 
-                newFiles.Add(serverFile);
+                    if (serverFile is null)
+                    {
+                        return Responses.BadRequest($"File with id '{file.Id}' doesn't exists.");
+                    }
+
+                    newFiles.Add(serverFile);
+                }
             }
 
-            messageToEdit.MessageReplyId = editedMessage.MessageReplyId;
+            messageToEdit.MessageReplyId = editedMessage.MessageReplyId ?? messageToEdit.MessageReplyId;
             messageToEdit.MessageReply = null;
-            messageToEdit.Files = newFiles;
-            messageToEdit.Text = editedMessage.Text;
+            messageToEdit.Files = newFiles.Count != 0 ? newFiles : messageToEdit.Files;
+            messageToEdit.Text = editedMessage.Text ?? messageToEdit.Text;
             messageToEdit.Edited = true;
 
             await messageRepository.UpdateAsync(messageToEdit);
@@ -223,7 +227,7 @@
         [SwaggerResponse(HttpStatusCode.Unauthorized, null, Description = "Your request was not authorized to access the requested resource. This could be due to missing or invalid authentication credentials.")]
         [ReDocCodeSamples]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Remove(int id)
         {
             var messageToRemove = await messageRepository.GetAsync(id);
 

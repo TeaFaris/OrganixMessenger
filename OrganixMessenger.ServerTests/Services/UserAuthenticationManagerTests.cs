@@ -36,7 +36,7 @@ namespace OrganixMessenger.ServerTests.Services
 
             var expectedUser = new ApplicationUser
             {
-                Username = username,
+                Name = username,
                 Email = email,
                 VereficationToken = It.IsAny<string>(),
                 PasswordHash = It.IsAny<string>(),
@@ -79,7 +79,7 @@ namespace OrganixMessenger.ServerTests.Services
 
             var existingUser = new ApplicationUser
             {
-                Username = username,
+                Name = username,
                 Email = email,
                 VereficationToken = "some-token",
                 PasswordHash = "some-hash",
@@ -150,7 +150,7 @@ namespace OrganixMessenger.ServerTests.Services
 
             var user = new ApplicationUser
             {
-                Username = "testuser",
+                Name = "testuser",
                 Email = "testuser@example.com",
                 VereficationToken = code,
                 PasswordHash = "some-hash",
@@ -200,7 +200,7 @@ namespace OrganixMessenger.ServerTests.Services
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
             var user = new ApplicationUser
             {
-                Username = username,
+                Name = username,
                 PasswordHash = passwordHash
             };
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
@@ -224,7 +224,7 @@ namespace OrganixMessenger.ServerTests.Services
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
             var user = new ApplicationUser
             {
-                Username = username,
+                Name = username,
                 PasswordHash = passwordHash
             };
             userRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))

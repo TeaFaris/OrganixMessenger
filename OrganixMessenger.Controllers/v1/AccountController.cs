@@ -43,7 +43,7 @@
             logger.LogInformation(
                         "Guest with ip {ip} confirmed email for account with username {username} and email {email}",
                         Request.HttpContext.Connection.RemoteIpAddress,
-                        result.User.Username,
+                        result.User.Name,
                         result.User.Email
                     );
 
@@ -76,7 +76,7 @@
             logger.LogInformation(
                         "Guest with ip {ip} changed password for account with username {username} and email {email}",
                         Request.HttpContext.Connection.RemoteIpAddress,
-                        result.User.Username,
+                        result.User.Name,
                         result.User.Email
                     );
 
