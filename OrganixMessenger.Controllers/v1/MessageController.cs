@@ -12,7 +12,9 @@
     public sealed class MessageController(
             ILogger<MessageController> logger,
             IMessageRepository messageRepository,
-            IFileRepository fileRepository
+            IFileRepository fileRepository,
+            IHubContext<MessengerHub, IMessengerHub> messengerHub,
+            IHubContext<MessengerBotHub, IMessengerHub> messengerBotHub
         ) : ControllerBase
     {
         /// <summary>
@@ -110,6 +112,9 @@
             serverMessage = (await messageRepository.GetAsync(serverMessage.Id))!;
 
             MessageDTO messageDTO = serverMessage.ToDTO();
+
+            await messengerHub.Clients.All.ReceiveMessages(messageDTO);
+            await messengerBotHub.Clients.All.ReceiveMessages(messageDTO);
 
             return messageDTO;
         }
@@ -237,6 +242,9 @@
 
             MessageDTO messageDTO = messageToEdit.ToDTO();
 
+            await messengerHub.Clients.All.ReceiveEditedMessages(messageDTO);
+            await messengerBotHub.Clients.All.ReceiveEditedMessages(messageDTO);
+
             return messageDTO;
         }
 
@@ -280,6 +288,9 @@
                     User.FindFirstValue(ClaimTypes.NameIdentifier)!,
                     id
                 );
+
+            await messengerHub.Clients.All.ReceiveRemovedMessages(id);
+            await messengerBotHub.Clients.All.ReceiveRemovedMessages(id);
 
             return Ok();
         }

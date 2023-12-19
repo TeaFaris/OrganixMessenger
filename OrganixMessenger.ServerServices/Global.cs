@@ -34,5 +34,5 @@ global using OrganixMessenger.ServerModels.MessageModel;
 global using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationBotModel;
 global using OrganixMessenger.ServerModels.BotCommandModel;
 global using Microsoft.AspNetCore.Mvc.Filters;
-global using OrganixMessenger.Controllers.Util;
 global using OrganixMessenger.ServerServices.Repositories.BotRepositories;
+global using OrganixMessenger.ServerShared.Util;

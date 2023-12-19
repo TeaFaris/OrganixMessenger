@@ -13,7 +13,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OrganixMessenger.Documentation\OrganixMessenger.Documentation.csproj" />
+    <ProjectReference Include="..\OrganixMessenger.Hubs\OrganixMessenger.Hubs.csproj" />
     <ProjectReference Include="..\OrganixMessenger.ServerServices\OrganixMessenger.ServerServices.csproj" />
+    <ProjectReference Include="..\OrganixMessenger.ServerShared\OrganixMessenger.ServerShared.csproj" />
     <ProjectReference Include="..\OrganixMessenger.Shared\OrganixMessenger.Shared.csproj" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>

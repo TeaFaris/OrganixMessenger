@@ -2,7 +2,6 @@
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.Extensions.Logging;
-global using OrganixMessenger.Controllers.Util;
 global using OrganixMessenger.Shared;
 global using OrganixMessenger.Shared.API.Requests;
 global using OrganixMessenger.Shared.API.Responses;
@@ -32,3 +31,6 @@ global using OrganixMessenger.ServerModels.BotCommandModel;
 global using System.ComponentModel.DataAnnotations;
 global using OrganixMessenger.ServerServices.BotAuthorizationServices;
 global using OrganixMessenger.ServerModels.MessengerEntityModels.ApplicationUserModel;
+global using Microsoft.AspNetCore.SignalR;
+global using OrganixMessenger.Hubs;
+global using OrganixMessenger.ServerShared.Util;

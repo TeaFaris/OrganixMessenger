@@ -5,11 +5,11 @@ using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using OrganixMessenger.Base;
-using OrganixMessenger.Controllers.Util;
-using OrganixMessenger.Documentation;
+using OrganixMessenger.Hubs;
 using OrganixMessenger.ServerConfigurations;
 using OrganixMessenger.ServerData;
 using OrganixMessenger.ServerServices.APITokenGeneratorServices;
+using OrganixMessenger.ServerServices.BotAuthorizationServices;
 using OrganixMessenger.ServerServices.EmailServices;
 using OrganixMessenger.ServerServices.FileHostServices;
 using OrganixMessenger.ServerServices.HealthCheckServices;
@@ -48,7 +48,7 @@ builder.Services.AddRazorComponents()
 
 // ASP.NET services
 builder.Services.AddControllers()
-    .AddApplicationPart(typeof(Responses).Assembly);
+    .AddApplicationPart(typeof(OrganixMessenger.Controllers.v1.AuthorizeController).Assembly);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
 
@@ -57,8 +57,7 @@ builder.Services.AddSignalR();
 
 builder.Services.AddResponseCompression(opts =>
 {
-    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-       new[] { "application/octet-stream" });
+    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat([ "application/octet-stream" ]);
 });
 
 // Rate Limiter
@@ -246,6 +245,16 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+//// SignalR Hubs
+app.MapHub<MessengerHub>("api/hub/messenger");
+app.MapHub<MessengerBotHub>("api/bot/hub/messenger");
+
+// SignalR Hubs Authentication
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/messengerbothub"), options =>
+{
+    options.UseMiddleware<BotHubAuthorizationMiddleware>();
+});
+
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
@@ -285,6 +294,5 @@ app.UseReDoc(options =>
     options.DocumentPath = "/api/documentation/{documentName}/documentation.json";
     options.Path = "/api/documentation/redoc";
 });
-
 
 app.Run();

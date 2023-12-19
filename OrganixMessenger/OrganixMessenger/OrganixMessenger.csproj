@@ -9,11 +9,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\OrganixMessenger.Controllers\OrganixMessenger.Controllers.csproj" />
+    <ProjectReference Include="..\..\OrganixMessenger.Hubs\OrganixMessenger.Hubs.csproj" />
     <ProjectReference Include="..\..\OrganixMessenger.ServerConfigurations\OrganixMessenger.ServerConfigurations.csproj" />
     <ProjectReference Include="..\..\OrganixMessenger.ServerData\OrganixMessenger.ServerData.csproj" />
     <ProjectReference Include="..\..\OrganixMessenger.ServerServices\OrganixMessenger.ServerServices.csproj" />
     <ProjectReference Include="..\OrganixMessenger.Client\OrganixMessenger.Client.csproj" />
-    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
@@ -23,11 +24,15 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
     <PackageReference Include="NSwag.AspNetCore" Version="14.0.0-preview010" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="5.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
     <PackageReference Include="Serilog.Sinks.PostgreSQL" Version="2.3.0" />
     <PackageReference Include="Serilog.Sinks.PostgreSQL.Configuration" Version="1.0.1" />
     <PackageReference Include="Serilog.UI" Version="2.5.1" />
     <PackageReference Include="Serilog.UI.PostgreSqlProvider" Version="2.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Libraries\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace OrganixMessenger.Controllers.Util
+﻿namespace OrganixMessenger.ServerShared.Util
 {
     public static class Responses
     {

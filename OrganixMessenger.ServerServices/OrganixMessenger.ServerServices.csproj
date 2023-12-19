@@ -23,6 +23,7 @@
     <ProjectReference Include="..\OrganixMessenger.ServerConfigurations\OrganixMessenger.ServerConfigurations.csproj" />
     <ProjectReference Include="..\OrganixMessenger.ServerData\OrganixMessenger.ServerData.csproj" />
     <ProjectReference Include="..\OrganixMessenger.ServerModels\OrganixMessenger.ServerModels.csproj" />
+    <ProjectReference Include="..\OrganixMessenger.ServerShared\OrganixMessenger.ServerShared.csproj" />
   </ItemGroup>
 
 </Project>
