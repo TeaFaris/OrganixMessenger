@@ -1,6 +1,6 @@
 ﻿namespace OrganixMessenger.Documentation.ReDoc
 {
-    public readonly record struct ProgrammingLanguage : ISmartEnum<int>
+    public readonly record struct ProgrammingLanguage
     {
         public int ID { get; init; }
 
@@ -71,5 +71,7 @@
             Name = nameof(TypeScript),
             DisplayName = nameof(TypeScript)
         };
+
+        public static readonly ProgrammingLanguage[] Languages = [cURL, CSharp, Go, Java, JavaScript, PHP, Python, Rust, TypeScript];
     }
 }
