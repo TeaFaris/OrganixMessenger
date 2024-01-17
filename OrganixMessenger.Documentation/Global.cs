@@ -1,5 +1,4 @@
-﻿global using C3.SmartEnums;
-global using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿global using Microsoft.AspNetCore.Mvc.ModelBinding;
 global using Microsoft.AspNetCore.WebUtilities;
 global using Microsoft.Extensions.Primitives;
 global using NJsonSchema;

@@ -47,7 +47,7 @@
 
             var samples = (List<ReDocCodeSample>)value!;
 
-            var languages = SmartEnumExtentions.GetValues<ProgrammingLanguage, int>();
+            var languages = ProgrammingLanguage.Languages;
 
             var payloadJson = payloadSchema?.ToJsonSample(payloadDescriptor!.Type, arrayType);
             foreach (var language in languages)
